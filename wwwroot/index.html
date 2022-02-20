@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG</title>
+    <link href="images/favicon.png" rel="shortcut icon">
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+
+  <div class="login-form">
+    <div class="logo"><img src="images/favicon.png" alt=""></div>
+
+    <div class="header">
+      <h1>RAG</h1>
+      <h4>Real-Time Arcade Games</h4>
+    </div>
+
+    <div style="height: 250px">
+      <div class="profile-pic-div">
+        <img src="images/gamer100.png" id="photo">
+
+        <input type="file" id="file">
+        <label for="file" id="uploadBtn">Choose Photo</label>
+      </div>
+    </div>
+
+    <h6>Sign In</h6>
+
+    <form>
+      <div class="textbox">
+        <input id="name" type="text" placeholder="Username" autofocus>
+        <span class="check-message hidden">Required</span>
+      </div>
+
+      <div class="privacy-link">
+        <a href="#">Privacy Policy</a>
+      </div>
+    </form>
+  </div>
+
+  <script src="js/jquery.slim.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    //-------------------avatar-------------------
+    // const imgDiv = document.querySelector(".profile-pic-div");
+    // const img = document.querySelector("#photo");
+    // const file = document.querySelector("#file");
+    // const uploadBtn = document.querySelector("#uploadBtn");
+
+    //if hover on img
+    $(".profile-pic-div").mouseenter(e => $("#uploadBtn").show());
+
+    //if hover out from img
+    $(".profile-pic-div").mouseleave(e => $("#uploadBtn").hide());
+
+    //upload photo
+    $("#file").change(e => {
+      //this refers to file
+      const choosedFile = e.target.files[0];
+
+      if (choosedFile) {
+        // const reader = new FileReader(); //FileReader is a predefined function of JS
+        // reader.onload = e => $("#photo").prop("src", reader.result)
+        // reader.readAsDataURL(choosedFile);
+        crop(choosedFile, 100, 100, "dataURL", "image/webp")
+          .then(dataURL => $("#photo").prop("src", dataURL));
+      }
+    });
+
+    // uploadBtn.addEventListener("click", function () {
+    //   const reader = new FileReader();
+    //   let photo = reader.readAsDataURL("images/gamer.png");
+    // });
+
+    // ========================================================================================
+    // General
+    // ========================================================================================
+
+    // ========================================================================================
+    // Events
+    // ========================================================================================
+
+/*
+    // save photo to session storage by clickling choose photo
+    // if did not choose photo, meaning the session storage for photo is empty
+    // therefore, need to set default image
+    if (document.getElementById("uploadBtn").clicked == false) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        console.log(reader.result);
+        sessionStorage.setItem("photo", reader.result);
+      });
+      //    let photo = reader.readAsDataURL("images/gamer.png");
+      //    sessionStorage.setItem("photo", photo);
+    }
+
+    document.querySelector("#file").addEventListener("change", function () {
+      const reader = new FileReader();
+
+      reader.addEventListener("load", () => {
+        console.log(reader.result);
+        sessionStorage.setItem("photo", reader.result);
+      });
+
+      reader.readAsDataURL(this.files[0]); // reads single file only
+      //if multiple files then we need a loop to read all files one by one
+    });
+
+    // var defaultimgpath = "images/gamer.png";
+    // fileUpload.PostedFile.SaveAs(defaultimgpath);
+    // Session["DefaultImgPath"] = defaultimgpath;
+*/
+    $("form").submit((e) => {
+      e.preventDefault();
+
+      let photo = $("#photo").prop("src");
+      let name = $("#name").val().trim();
+      
+      if (photo && name) {
+        //let url = getImageURL(photo);
+        sessionStorage.setItem("photo", photo);
+        sessionStorage.setItem("name", name);
+        location = "list.html";
+      }
+
+      $("#name").val("").focus();
+    });
+  </script>
+</html>
