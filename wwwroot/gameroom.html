@@ -128,7 +128,7 @@
         }
 
         .create-room-btn,
-        .create-private-room-btn,
+        /*.create-private-room-btn,*/
         .private-chat-btn {
             border-radius: 10px;
             padding: 1em 1.5em;
@@ -158,14 +158,14 @@
             background-color:  #bf4306;
         }
 
-        .create-private-room-btn {
+        /* .create-private-room-btn {
             margin-right: 0.3em;
             background-color: #134391;
         }
 
         .create-private-room-btn:hover {
             background-color: #14489c;
-        }
+        } */
 
         #emptyRoomMessage {
             justify-content: center;
@@ -208,7 +208,7 @@
             }
 
             .create-room-btn,
-            .create-private-room-btn,
+            /* .create-private-room-btn, */
             .private-chat-btn {
                 padding: 0.5em 1em;
                 font-size: 0.7rem;
@@ -736,11 +736,11 @@
         <div class="button-section">
             <div class="private-chat">
                 <!-- Trigger/Open The Modal -->
-                <button class="private-chat-btn" data-toggle="#myModal">Private chat</button>
+                <button class="private-chat-btn" data-toggle="#myMoprivateGameBtndal">Private chat</button>
             </div>
             <div class="create-room">
-                <button href="createGame.html" class="create-private-room-btn" id="privateGameBtn">Create Private Room</button>
-                <button href="createGame.html" class="create-room-btn" id="publicGameBtn">Create Room</button>
+                <!-- <button href="createGame.html" class="create-private-room-btn" id="">Create Private Room</button> -->
+                <button href="game.html" class="create-room-btn" id="publicGameBtn">Create Room</button>
             </div>
         </div>
     </div>
@@ -1348,9 +1348,9 @@
             con.invoke('CreateGroup', true);
         });
 
-        $('#privateGameBtn').on('click', e => {
-            con.invoke('CreateGroup', false);
-        });
+        // $('#privateGameBtn').on('click', e => {
+        //     con.invoke('CreateGroup', false);
+        // });
 
         $('#gameRoom').on('click', '[data-groupid]', e => {
             let groupId = $(e.target).attr('data-groupid');
