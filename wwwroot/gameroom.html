@@ -53,14 +53,22 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
+            padding-top: 10px;
         }
 
         .header > .title {
-            color: #edae00;
+            padding: 5px 5px;
             margin: 0;
             text-align: center;
             display: flex;
             align-items: center;
+        }
+
+        .header > .title > p {
+            font-size: xx-large;
+            background-image: -webkit-linear-gradient(315deg, #f8ceec 0%, #a88beb 74%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .header > .profile > a > .profile-photo {
@@ -81,13 +89,13 @@
             overflow-y: auto;
             margin-top: 0.7em;
             flex-basis: 40em;
-            border: 1px solid white;
+            border: 1px solid #BF40BF ;
         }
 
         .room-grid > * {
             padding: 0 1em;
             flex: 0 0 4em;
-            border-bottom: 1px solid grey;
+            border-bottom: 1px solid #BF40BF ;
             background-color:  #292929;
             display: flex;
             justify-content: space-between;
@@ -165,7 +173,8 @@
         }
 
         #emptyRoomMessage > span {
-            color: orange;
+            font-size: large;
+            color: #CF9FFF;
         }
 
         @media (max-width: 1100px) {
@@ -699,6 +708,10 @@
         .notification-close {
             margin-left: 0.8em;
         }
+
+        .emoji{
+            color: white;
+        }
         
     </style>
     <script src="js/login.js"></script>
@@ -707,7 +720,7 @@
 <body>
     <div class="container" style="display: none;" id="container">
         <div class="header">
-            <h2 class="title"><i class="fas fa-gamepad"></i>Game Rooms<i class="fas fa-gamepad"></i></h2>
+            <h2 class="title"><i class="fa-solid fa-gamepad-modern"></i><p>Arcade Room</p><i class="fa-solid fa-gamepad-modern"></i></h2>
             <div class="profile">
                 <span class="profile-name" id="name"></span>
                 <a href="index.html" class="center-element"><img src="avatar/row-1-col-1.png" class="profile-photo"
@@ -716,60 +729,9 @@
         </div>
         <div class="room-grid" id="gameRoom">
             <div id="emptyRoomMessage">
-                <span>No game room available, create now!</span>
+                <span>Empty room &nbsp; <span class="emoji">(┬┬﹏┬┬)</span> </span>
             </div>
 
-            <!-- 
-            <div data-groupid="12345">
-                <div>Game Code</div>
-                <div><i class="fas fa-user-alt"></i><span>1 / 5</span></div>
-            </div>
-            <div data-groupid="12345">
-                <div>Game Code</div>
-                <div><i class="fas fa-user-alt"></i><span>1 / 5</span></div>
-            </div>
-            <div data-groupid="12345">
-                <div>Game Code</div>
-                <div><i class="fas fa-user-alt"></i><span>1 / 5</span></div>
-            </div>
-            <div data-groupid="12345">
-                <div>Game Code</div>
-                <div><i class="fas fa-user-alt"></i><span>1 / 5</span></div>
-            </div>
-            <div data-groupid="12345">
-                <div>Game Code</div>
-                <div><i class="fas fa-user-alt"></i><span>1 / 5</span></div>
-            </div>
-            <div data-groupid="12345">
-                <div>Game Code</div>
-                <div><i class="fas fa-user-alt"></i><span>1 / 5</span></div>
-            </div>
-            <div data-groupid="12345">
-                <div>Game Code</div>
-                <div><i class="fas fa-user-alt"></i><span>1 / 5</span></div>
-            </div>
-            <div data-groupid="12345">
-                <div>Game Code</div>
-                <div><i class="fas fa-user-alt"></i><span>1 / 5</span></div>
-            </div>
-            <div data-groupid="12345">
-                <div>Game Code</div>
-                <div><i class="fas fa-user-alt"></i><span>1 / 5</span></div>
-            </div>
-            <div data-groupid="12345">
-                <div>Game Code</div>
-                <div><i class="fas fa-user-alt"></i><span>1 / 5</span></div>
-            </div>
-
-            <div data-groupid="12345">
-                <div>Game Code</div>
-                <div><i class="fas fa-user-alt"></i><span>1 / 5</span></div>
-            </div>
-            <div data-groupid="12345">
-                <div>Game Code</div>
-                <div><i class="fas fa-user-alt"></i><span>1 / 5</span></div>
-            </div>
-        -->
         </div>
         <div class="button-section">
             <div class="private-chat">
@@ -795,21 +757,7 @@
                     </div>
                     <div class="header-name-container" id="header-name"></div>
                 </div>
-                <div class="modal-body" id="chatList">  
-                    <!-- <div class="chat-user" data-chat="Chan Sin Yow">
-                        <div class="body-avatar-container">
-                            <img class="photo" src="avatar/empty.png">
-                        </div>
-                        <div class="empty-container">
-                            Namee 1
-                        </div>
-                        <div class="notify">
-                            <div class="notify-count">
-                                1
-                            </div>
-                        </div>  
-                    </div> -->
-                </div>
+                <div class="modal-body" id="chatList"></div>
             </div>
             <div class="right-container">
                 <i class="fas fa-times close-modal" data-dismiss="#myModal"></i>
