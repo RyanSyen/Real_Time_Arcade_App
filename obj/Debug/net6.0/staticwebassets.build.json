@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "u6wVj+lBpjobdhjuzpxkP47QtGIu7P6X3uiNgjr4t88=",
+  "Hash": "GevxdWuMkJgpD33KGd6ebVP9EDnThMwj3ryLjWaeb2M=",
   "Source": "assignment",
   "BasePath": "_content/assignment",
   "Mode": "Default",
@@ -595,6 +595,23 @@
       "OriginalItemSpec": "wwwroot\\images\\pencil-up.png"
     },
     {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\images\\pencil.jpg",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "images/pencil.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\pencil.jpg"
+    },
+    {
       "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\images\\test_image\\300x300.jpg",
       "SourceId": "assignment",
       "SourceType": "Discovered",
@@ -1103,6 +1120,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\test_image\\tzuyu-5.jpg"
+    },
+    {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\images\\tictactoe.png",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "images/tictactoe.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\tictactoe.png"
+    },
+    {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\images\\typing_game.jpg",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "images/typing_game.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\typing_game.jpg"
     },
     {
       "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\index.html",

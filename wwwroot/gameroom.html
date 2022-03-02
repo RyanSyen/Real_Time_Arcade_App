@@ -738,6 +738,7 @@
         /* opacity: 0.7; */
         position: absolute;
         top: 0;
+        display: none;
       }
 
       .modal-content {
@@ -763,6 +764,7 @@
           /* background-color: whitesmoke; */
           /* border: 2px solid purple !important; */
           transition: transform .2s;
+          cursor: pointer;
       }
 
       .game1 :hover{
@@ -802,9 +804,25 @@
           
       }
 
+      .close-button{
+        cursor: pointer; 
+        color: white; 
+        position: inherit; 
+        top: 10px; 
+        background-color: #BF40BF;
+      }
+
       .close :hover{
-          color: black;
+          /* color: black; */
           background-color: red;
+      }
+
+      .selection-header > .close-modal {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        cursor: pointer;
+        color: white;
       }
 
     </style>
@@ -852,9 +870,11 @@
       <div class="modal-content">
           <div class="selection-header">
             <h2 class="choose-game-header">&#9876; Choose a game to play! &#9876;</h2>
+            <!-- <i class="fas fa-times close-modal" data-dismiss="#myModal"></i> -->
             <div class="close">
-                <button class="close-button" style="position: inherit; top: 10px;""><b>X</b></button>
+                <button class="close-button"><b>X</b></button>
             </div>
+            <i class="fas fa-times close-modal"></i>
           </div>
         <div class="game-container">
             <div class="game-container-1">
@@ -961,6 +981,18 @@
     <script src="https://unpkg.com/vue-emoji-picker/dist/vue-emoji-picker.js"></script>
 
     <script>
+      
+      //
+
+      //to reveal modal when create game btn is clicked
+      document.getElementById('publicGameBtn').addEventListener('click', function(){
+        document.querySelector('.selection-modal').style.display = 'flex';
+      });
+
+      //this is to close the modal
+      document.querySelector('.close-button').addEventListener('click', function(){
+        document.querySelector('.selection-modal').style.display = 'none';
+      });
 
         //if user hovers image, will show the game name below
         $('.game1').mouseover(function(){
@@ -1274,7 +1306,7 @@
 
       // Navigate to game room when creating game room
       con.on("NavigateGroup", (guid) => {
-        window.location = "game.html?id=" + guid;
+        window.location = "draw.html?id=" + guid;
       });
 
       // Display Error message if something went wrong
@@ -1504,8 +1536,8 @@
       });
 
       // Event Listener ==================================================================
-      // Create Game Room
-      $("#publicGameBtn").on("click", (e) => {
+      // Create Draw and Guess Game Room
+      $("#game1").on("click", (e) => {
         con.invoke("CreateGroup", true);
       });
 
