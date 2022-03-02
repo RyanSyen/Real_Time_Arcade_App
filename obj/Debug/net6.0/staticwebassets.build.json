@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "GevxdWuMkJgpD33KGd6ebVP9EDnThMwj3ryLjWaeb2M=",
+  "Hash": "FrktTfij+a3oy+yRwC+rU1j9TgfoUnOPBhcA5B1O8mw=",
   "Source": "assignment",
   "BasePath": "_content/assignment",
   "Mode": "Default",
@@ -287,6 +287,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\draw.html"
+    },
+    {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\drawandguess.html",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "drawandguess.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\drawandguess.html"
     },
     {
       "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\DrawHub_backup.txt",
@@ -1341,6 +1358,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\list.html"
+    },
+    {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\test.html",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "test.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\test.html"
     }
   ]
 }
