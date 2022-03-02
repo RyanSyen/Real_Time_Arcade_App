@@ -982,16 +982,24 @@
 
     <script>
       
-      //
+      // //
 
-      //to reveal modal when create game btn is clicked
-      document.getElementById('publicGameBtn').addEventListener('click', function(){
-        document.querySelector('.selection-modal').style.display = 'flex';
+      // //to reveal modal when create game btn is clicked
+      // document.getElementById('publicGameBtn').addEventListener('click', function(){
+      //   document.querySelector('.selection-modal').style.display = 'flex';
+      // });
+
+      // //this is to close the modal
+      // document.querySelector('.close-button').addEventListener('click', function(){
+      //   document.querySelector('.selection-modal').style.display = 'none';
+      // });
+
+      $('#publicGameBtn').click(function(){
+        $('.selection-modal').css('display', 'flex');
       });
 
-      //this is to close the modal
-      document.querySelector('.close-button').addEventListener('click', function(){
-        document.querySelector('.selection-modal').style.display = 'none';
+      $('.close-button').click(function(){
+        $('.selection-modal').css('display', 'none');
       });
 
         //if user hovers image, will show the game name below
@@ -1306,7 +1314,7 @@
 
       // Navigate to game room when creating game room
       con.on("NavigateGroup", (guid) => {
-        window.location = "draw.html?id=" + guid;
+        window.location = "drawandguess.html?id=" + guid;
       });
 
       // Display Error message if something went wrong
@@ -1537,7 +1545,7 @@
 
       // Event Listener ==================================================================
       // Create Draw and Guess Game Room
-      $("#game1").on("click", (e) => {
+      $(".game1").on("click", (e) => {
         con.invoke("CreateGroup", true);
       });
 
@@ -1547,7 +1555,7 @@
 
       $("#gameRoom").on("click", "[data-groupid]", (e) => {
         let groupId = $(e.target).attr("data-groupid");
-        window.location = "game.html?id=" + groupId;
+        window.location = "drawandguess.html?id=" + groupId;
       });
 
       $("#chatList").on("click", "div[data-chat]", (e) => {
