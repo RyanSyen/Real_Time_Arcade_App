@@ -3,16 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Room</title>
+    <title>Game Room</title>
+    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+        integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous"> -->
     <link href="images/favicon.png" rel="shortcut icon">
-    <!-- <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
-      integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu"
-      crossorigin="anonymous"
-    /> -->
     <link rel="stylesheet" href="css/global.css" />
+    <!-- <link rel="stylesheet" href="css/all.css" /> -->
     <link rel="shortcut icon" href="#" />
+    <script src="https://kit.fontawesome.com/4612477850.js" crossorigin="anonymous"></script>
     <style>
       html,
       body {
@@ -99,6 +97,7 @@
         margin-top: 0.7em;
         flex-basis: 40em;
         border: 1px solid #bf40bf;
+        box-shadow: 0px 0px 10px 10px #CF9FFF;
       }
 
       .room-grid > * {
@@ -120,7 +119,8 @@
       }
 
       .button-section {
-        margin-top: 0.5em;
+        /* margin-top: 0.5em; */
+        margin:  40px 0 ;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -152,21 +152,39 @@
       }
 
       .private-chat-btn {
-        background-color: #046b24;
+        background-color: #6C0BA9;
       }
 
       .private-chat-btn:hover {
-        background-color: #057829;
+        background-color: #880ED4;
       }
 
       .create-room-btn {
-        background-color: #b53f05;
+        background-color: #CF9FFF ;
+        color: #010101;
+        /* transition: width 2s, height 2s, transform 2s;
+        transition-delay: 1s; */
       }
 
       .create-room-btn:hover {
-        background-color: #bf4306;
+        background-color: #BF40BF ;
+        color: white;
+        
       }
 
+      .text{
+        opacity: 0;
+        font-size: 30px;
+        padding-left: 10px;
+        -webkit-text-stroke: 1px #F8F8F8;
+	      text-shadow: 0px 2px 4px grey;
+        /*transform: rotate(180deg); */
+      }
+
+      /* .create-room-btn:hover .text{
+       
+        opacity: 1;
+      } */
       /* .create-private-room-btn {
             margin-right: 0.3em;
             background-color: #134391;
@@ -825,6 +843,41 @@
         color: white;
       }
 
+      .battle-img{
+        /* width: 100px;
+        height: 100px;
+        position: absolute;
+        top: 50%;
+        left: 45%;
+        cursor: pointer;
+        transition: all  .2s ease-in-out;  */
+        transition: all  2s ease-in-out;
+        width: 120px;
+        height: 120px;
+        background-color: transparent;
+        border: none;
+        /* cursor: pointer; */
+      }
+
+      .batttle-img:hover{
+        
+        width: 150px;
+        height: 150px;
+      }
+
+      .battle-btn{
+        position: absolute;
+        top: 10%;
+        left: 40%;
+        background-color: transparent;
+        border: none;
+      }
+
+      .battle-btn:hover{
+        transform: scale(1.5);
+      }
+
+      
     </style>
     <script src="js/login.js"></script>
   </head>
@@ -860,8 +913,13 @@
           <!-- <button href="createGame.html" class="create-private-room-btn" id="">Create Private Room</button> -->
           <button href="" class="create-room-btn" id="publicGameBtn">
             Create Room
+            
           </button>
+          <span class = "text">
+            ⚔️
+          </span>
         </div>
+        
       </div>
     </div>
 
@@ -874,7 +932,7 @@
             <div class="close">
                 <button class="close-button"><b>X</b></button>
             </div>
-            <i class="fas fa-times close-modal"></i>
+            <!-- <i class="fas fa-times close-modal"></i> -->
           </div>
         <div class="game-container">
             <div class="game-container-1">
@@ -993,6 +1051,14 @@
       // document.querySelector('.close-button').addEventListener('click', function(){
       //   document.querySelector('.selection-modal').style.display = 'none';
       // });
+
+      $('.create-room-btn').mouseover(function(){
+        $('.text').css({'opacity': '1'});
+      });
+
+      $('.create-room-btn').mouseleave(function(){
+        $('.text').css('opacity', '0');
+      });
 
       $('#publicGameBtn').click(function(){
         $('.selection-modal').css('display', 'flex');
@@ -1330,6 +1396,17 @@
         // if the empty room exist, hide it.
         if ($("#emptyRoomMessage").length) {
           $("#emptyRoomMessage").css("display", "none");
+          $("#gameRoom").append(`
+            <div class"room-header" style="justify-content: center; ">
+              <span style="font-size: xx-large; font-weight: 900;">
+                <!-- <i class="fas fa-gamepad">-->
+                The Game Room
+              </span>
+
+            </div>
+          
+                        
+                     `);
         }
 
         // if the group exist, then just append the number
@@ -1345,6 +1422,17 @@
                 `);
         }
       });
+
+      // if ( $("#emptyRoomMessage").css('display') == 'none'){
+      //   $("#gameRoom").append(`
+      //                   <div data-groupid="${group.groupId}">
+      //                       <div>${group.groupId}</div>
+      //                       <div><i class="fas fa-user-alt"></i><span>${
+      //                         Object.keys(group.userScore).length
+      //                       }</span> / 5</div>
+      //                   </div>
+      //               `);
+      // }
 
       // Remove Game Room
       con.on("RemoveGameRoom", (groupId, memberCount) => {
