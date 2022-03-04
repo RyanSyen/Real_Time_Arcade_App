@@ -33,6 +33,8 @@
         <span class="check-message hidden">Required</span>
       </div>
 
+      <div class="join"><button class="join-btn">Join</button></div>
+      
       <div class="privacy-link">
         <a href="#">Privacy Policy</a>
       </div>
@@ -63,7 +65,7 @@
         // const reader = new FileReader(); //FileReader is a predefined function of JS
         // reader.onload = e => $("#photo").prop("src", reader.result)
         // reader.readAsDataURL(choosedFile);
-        crop(choosedFile, 100, 100, "dataURL", "image/webp")
+        crop(choosedFile, 150, 150, "dataURL", "image/webp")
           .then(dataURL => $("#photo").prop("src", dataURL));
       }
     });
@@ -117,6 +119,11 @@
       let photo = $("#photo").prop("src");
       let name = $("#name").val().trim();
       
+      if (!name) {
+                alert("Name is required!");
+                return;
+            }
+
       if (photo && name) {
         //let url = getImageURL(photo);
         sessionStorage.setItem("photo", photo);

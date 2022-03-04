@@ -184,8 +184,8 @@ body{
 }
 
 .profile-pic-div {
-  height: 100px;
-  width: 100px;
+  height: 150px;
+  width: 150px;
   position: relative;
   top: 50%;
   left: 50%;
@@ -193,7 +193,8 @@ body{
   border-radius: 50%;
   overflow: hidden;
   border: 1.5px solid whitesmoke;
-  background-color: rgb(54, 52, 52);
+  /* background-color: rgb(54, 52, 52); */
+  background-color: black;
 }
 
 #photo {
@@ -227,4 +228,31 @@ body{
   font-family: "hind",sans-serif;
   text-align: center;
   padding-top: 10px;
+}
+
+.join{
+  display: flex;
+  justify-content: center;
+  padding-top: 15px;
+  
+}
+
+.join-btn{
+  background-color: #6C0BA9;
+  width: 100px;
+  height: 40px;
+  border: none;
+  border-radius: 25px;
+  color: whitesmoke;
+  cursor: pointer;
+  /* transition: width .7s ease-out; */
+}
+
+.join-btn:hover{
+  background-color: #880ED4;
+  /* border: 1px solid whitesmoke; */
+  /* font-size: large; */
+  /* width: 100%; */
+  /* font-size: 16px; */
+  font-weight: bold;
 }

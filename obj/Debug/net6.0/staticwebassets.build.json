@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "FrktTfij+a3oy+yRwC+rU1j9TgfoUnOPBhcA5B1O8mw=",
+  "Hash": "7WIelIl1qj272mSk2WwUw35n7S/K7ksa3jqcKqp5I8I=",
   "Source": "assignment",
   "BasePath": "_content/assignment",
   "Mode": "Default",
@@ -221,6 +221,23 @@
       "OriginalItemSpec": "wwwroot\\Chathub_backup.txt"
     },
     {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\css\\all.css",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "css/all.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\all.css"
+    },
+    {
       "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\css\\app.css",
       "SourceId": "assignment",
       "SourceType": "Discovered",
@@ -372,6 +389,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\gameroom.html"
+    },
+    {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\images\\battle.png",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "images/battle.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\battle.png"
     },
     {
       "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\images\\color.png",
