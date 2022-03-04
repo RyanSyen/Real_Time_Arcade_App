@@ -31,12 +31,13 @@
             display: grid;
             justify-content: center;
             grid-template-areas:
-                'topleft topleft tools tools tools tools'
-                'user user canvas canvas canvas canvas'
-                'gameState gameState status status status status'
-                'gameState gameState chat chat chat chat';
-            grid-template-columns: 150px 150px 170px 170px 170px 170px;
-            grid-template-rows: auto calc(90px * 5) 130px 250px;
+                /* 'topleft topleft tools tools tools tools' */
+                'tools tools tools tools tools tools'
+                'user user canvas canvas canvas chat'
+                'gameState gameState status status status chat';
+                /* 'gameState gameState chat chat chat chat'; */
+            grid-template-columns: 100px 100px 170px 170px 170px 250px;
+            grid-template-rows: auto calc(90px * 4) 130px 250px;
             grid-gap: 0.6em;
             margin-top: 1em;
         }
@@ -58,10 +59,11 @@
         }
 
         .container > div {
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            /* border: 1px solid rgba(255, 255, 255, 0.3); */
+            border: 1px solid #CF9FFF;
         }
 
-        .topleft    { grid-area: topleft;   }
+        /* .topleft    { grid-area: topleft;   } */
         .tools      { grid-area: tools;     }
         .user       { grid-area: user;      }
         .status     { grid-area: status;    }
@@ -69,7 +71,7 @@
         .gameState  { grid-area: gameState; }
         .chat       { grid-area: chat;      }
 
-        .topleft {
+        /* .topleft {
             display: flex;
         }
 
@@ -113,7 +115,7 @@
             border: none;
             cursor: pointer;
             font-weight: bold;
-        }
+        } */
 
         .user {
             display: flex;
@@ -123,8 +125,8 @@
 
         .user > .userlist {
             flex-basis: 20%;
-            border-top: 1px solid grey;
-            border-bottom: 1px solid grey;
+            border-top: 1px solid #CF9FFF ;
+            border-bottom: 1px solid #CF9FFF ;
             display: flex;
             width: 100%;
             height: 20%;
@@ -149,13 +151,15 @@
             align-items: center;
             text-align: center;
             position: relative;
+            padding-left: 5px;
         }
 
         .user > .userlist > .photo-container > .photo {
-            width: 55px;
-            height: 55px;
+            width: 50px;
+            height: 50px;
             object-fit: cover;
             border-radius: 50%;
+            /* padding-left: 5px; */
         }
 
         .user > .userlist > .photo-container > .photo-isdrawing {
@@ -177,6 +181,7 @@
             display: flex;
             align-items: center;
             color: rgba(255, 255, 255, 0.5);
+            padding-left: 5px;
         }
 
         .user > .userlist > .user-detail-container {
@@ -203,7 +208,7 @@
 
         .user > .userlist > .action-container {
             flex-basis: 15%;
-            border-left: 1px solid grey;
+            border-left: 1.5px solid #CF9FFF ;
             display: flex;
             flex-direction: column;
         }
@@ -307,14 +312,14 @@
             display: flex;
         }
 
-        .chat > div {
+        /* .chat > div {
             display: flex;
             flex-direction: column;
             flex-basis: 50%;
             width: 50%;
             border: 1px solid grey;
             padding: 0.5em;
-        }
+        } */
         
         /* .chat > div > div {
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -727,11 +732,12 @@
         }
 
         .left-container > .modal-body > .chat-user > .body-avatar-container > .photo {
-            width: 55px;
-            height: 55px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             object-fit: cover;
             border: 1px solid white;
+            
         }
 
         .left-container > .modal-body > .chat-user > .empty-container {
@@ -1115,7 +1121,7 @@
 
 <body>
     <div class="container" style="display: none;" id="container">
-        <div class="topleft">
+        <!-- <div class="topleft">
             <div class="exit-and-copylink">
                 <div id="exit" class="exit" title="exit">
                     <i class="fas fa-times"></i>
@@ -1125,7 +1131,7 @@
                 </div>
             </div>
             <button class="private-chat-btn" data-toggle="#myModal">Private Chat</button>
-        </div>
+        </div> -->
         <div class="tools">
             <div class="toolset">
                 <input id="pencil" type="radio" name="toolset" value="pencil">
@@ -1254,7 +1260,7 @@
             </div>
         </div>
         <div class="chat">
-            <div class="answer-chat">
+            <!-- <div class="answer-chat">
                 <div id="answerChat">
                     <div class="color-lightgrey" style="border-bottom: 1px solid grey;">Write Answer Here...</div>
                 </div>
@@ -1263,7 +1269,7 @@
                     <input id="answerChatText" type="text" placeholder="Wait for guessing time" disabled maxlength="50">
                     <button id="answerChatBtn" disabled><i class="fas fa-paper-plane"></i></button>
                 </form>
-            </div>
+            </div> -->
             <div class="simple-chat">
                 <div id="simpleChat">
                     <div class="color-lightgrey" style="border-bottom: 1px solid grey;">Chit Chat Here...</div>
@@ -2173,7 +2179,8 @@
                         <div class="action-container">
                             ${(username == sessionStorage.getItem('name')) 
                                 ?   `<div>
-                                    <i class="fas fa-arrow-left"></i>
+                                    <!--<i class="fas fa-arrow-left"></i>-->
+                                    <i class="fas fa-gamepad" style="font-size:24px; color: #0096FF; padding: 5px;"></i>
                                     </div>` 
                                 :   ``}
                             ${(drawer == username)
@@ -2192,7 +2199,7 @@
                             <img class="photo" src="avatar/empty.png">
                         </div>
                         <div class="empty-container">
-                            Empty...
+                            Empty 😭
                         </div>
                     </div>`;
         }
@@ -2226,11 +2233,11 @@
         };
 
         // this is for answer chat
-        let answerChatSpam = {
-            recentChat: Date.now(),    // to record the first time simpleChat
-            chatTimes: 0,              // to record how many time he had chat
-            penaltyTime: null          // to know that users get penalty
-        }
+        // let answerChatSpam = {
+        //     recentChat: Date.now(),    // to record the first time simpleChat
+        //     chatTimes: 0,              // to record how many time he had chat
+        //     penaltyTime: null          // to know that users get penalty
+        // }
 
         // if user chat 5 times within 4 seconds, he/she will get penalty for 3 seconds
         function isSpam(chatId) {
@@ -2240,9 +2247,9 @@
             if (chatId == "#simpleChat") {
                 tempChat = simpleChatSpam;
             }
-            else if (chatId == "#answerChat") {
-                tempChat = answerChatSpam;
-            }
+            // else if (chatId == "#answerChat") {
+            //     tempChat = answerChatSpam;
+            // }
             else {
                 return true;
             }
@@ -2296,10 +2303,10 @@
         }
 
          // NOT allow the text box to send answer
-        function disableAnswerChat(placeholder = 'Wait for guessing time') {
-            $('#answerChatText').val('').prop('disabled', true).prop('placeholder', placeholder);
-            $('#answerChatBtn').prop('disabled', true);
-        }
+        // function disableAnswerChat(placeholder = 'Wait for guessing time') {
+        //     $('#answerChatText').val('').prop('disabled', true).prop('placeholder', placeholder);
+        //     $('#answerChatBtn').prop('disabled', true);
+        // }
 
         // for progress bar animation
         function progressBar(timeTaken, percentage) {
@@ -2430,7 +2437,7 @@
         // when the user guessed the answer
         con.on('ReceiveCorrectMessage', (word) => {
 
-            appendChat('#answerChat', 
+            appendChat('#simpleChat', 
             `
                 <div class="color-green">
                     <i class="fas fa-check-circle"></i>
@@ -2439,14 +2446,14 @@
             `);
 
             // NOT allow the text box to send answer
-            disableAnswerChat("You had guessed it!");
+            // disableAnswerChat("You had guessed it!");
         });
 
         // Receive Hit Message
         // when other user hit the answer
         con.on('ReceiveHitMessage', (name) => {
 
-            appendChat('#answerChat', 
+            appendChat('#simpleChat', 
             `
                 <div class="color-green">
                     <i class="fas fa-check-circle"></i>
@@ -3094,7 +3101,7 @@
             if (!message) { return; } // if message is empty
             if (isSpam('#answerChat')) { return; } // if it was a spam
 
-            con.invoke("SendAnswerMessage", message);
+            con.invoke("SendAnswerMessage", message); // -> apphub
         });
 
         // for input focus
