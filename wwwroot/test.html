@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="css/emojionearea.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="js/emojionearea.min.js"></script> -->
+    <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script>
+    <title>Test</title>
+        <style>
+            canvas {
+                display: none;
+            }
+        </style>
+</head>
+<body>
+    <!-- <input type="text" id="textArea" placeholder="Enter message"> -->
+    <video id="webCam" width="640" height="480" autoplay></video>
+    <canvas id="canvas"></canvas>
+    <button><a download onclick="takeAPicture()">Snap</a></button>
+    <script>
+       /*  $('#textArea').emojioneArea({
+                pickerPosition: "bottom"
+            }); */
+    const webCamElement = document.getElementById("webCam");
+    const canvasElement = document.getElementById("canvas");
+    const webcam = new Webcam(webCamElement, "user", canvasElement);
+    webcam.start();
+
+    function takeAPicture() {
+        let picture = webcam.snap();
+        document.querySelector("a").href = picture;
+    }
+    </script>
+</body>
+</html>
