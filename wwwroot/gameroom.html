@@ -1031,6 +1031,19 @@
     <script src="https://unpkg.com/vue-emoji-picker/dist/vue-emoji-picker.js"></script>
 
     <script>
+
+      //store selected game into session
+      var drawandguess  = $(".game1").attr('src');
+      var tictactoe  = $(".game2").attr('src');
+      var typing  = $(".game3").attr('src');
+
+      $(".button").click(function () {
+        var images = $(".img1 img").attr('src');
+        alert(images);
+      });
+
+
+
       $('.create-room-btn').mouseover(function(){
         $('.text').css({'opacity': '1'});
       });
@@ -1359,7 +1372,9 @@
 
       // Navigate to game room when creating game room
       con.on("NavigateGroup", (guid) => {
-        window.location = "drawandguess.html?id=" + guid;
+        // window.location = "drawandguess.html?id=" + guid;
+        var game = sessionStorage.getItem('game');
+        window.location = game + ".html?id=" + guid;
       });
 
       // Display Error message if something went wrong
@@ -1393,6 +1408,7 @@
           // if not exist, append the entire element
           $("#gameRoom").append(`
                     <div data-groupid="${groupId}">
+                        <div> </div>
                         <div>${groupId}</div>
                         <div><i class="fas fa-user-alt"></i><span>${memberCount}</span> / 5</div>
                     </div>
@@ -1600,12 +1616,22 @@
       // Event Listener ==================================================================
       // Create Draw and Guess Game Room
       $(".game1").on("click", (e) => {
-        con.invoke("CreateGroup", true);
+        var game = drawandguess;
+        sessionStorage.setItem('game', drawandguess);
+        con.invoke("CreateGroup", true, game);
       });
 
-      // $('#privateGameBtn').on('click', e => {
-      //     con.invoke('CreateGroup', false);
-      // });
+      $(".game2").on("click", (e) => {
+        var game = tictactoe;
+        sessionStorage.setItem('game', tictactoe);
+        con.invoke("CreateGroup", true, game);
+      });
+
+      $(".game3").on("click", (e) => {
+        var game = typing;
+        sessionStorage.setItem('game', typing);
+        con.invoke("CreateGroup", true, game);
+      });
 
       $("#gameRoom").on("click", "[data-groupid]", (e) => {
         let groupId = $(e.target).attr("data-groupid");

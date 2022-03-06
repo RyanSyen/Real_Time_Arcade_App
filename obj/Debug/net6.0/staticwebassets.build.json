@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "7WIelIl1qj272mSk2WwUw35n7S/K7ksa3jqcKqp5I8I=",
+  "Hash": "dRtHPKVKXUSqKXRH3nKHiLemxtbqqDtMv635O0asoh0=",
   "Source": "assignment",
   "BasePath": "_content/assignment",
   "Mode": "Default",
@@ -16,6 +16,40 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\audio\\feedback.wav",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "audio/feedback.wav",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\audio\\feedback.wav"
+    },
+    {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\audio\\notification.wav",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "audio/notification.wav",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\audio\\notification.wav"
+    },
     {
       "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\avatar\\empty.png",
       "SourceId": "assignment",
@@ -610,6 +644,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\loader.gif"
+    },
+    {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\images\\logout.png",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "images/logout.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\logout.png"
     },
     {
       "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\images\\pencil-down.png",
@@ -1409,6 +1460,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\test.html"
+    },
+    {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\tictactoe.html",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "tictactoe.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\tictactoe.html"
     }
   ]
 }

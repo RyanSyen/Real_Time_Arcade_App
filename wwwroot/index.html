@@ -44,11 +44,6 @@
   <script src="js/jquery.slim.js"></script>
   <script src="js/app.js"></script>
   <script>
-    //-------------------avatar-------------------
-    // const imgDiv = document.querySelector(".profile-pic-div");
-    // const img = document.querySelector("#photo");
-    // const file = document.querySelector("#file");
-    // const uploadBtn = document.querySelector("#uploadBtn");
 
     //if hover on img
     $(".profile-pic-div").mouseenter(e => $("#uploadBtn").show());
@@ -69,6 +64,20 @@
           .then(dataURL => $("#photo").prop("src", dataURL));
       }
     });
+
+    // To check if username is used by others people ===================================
+    if (sessionStorage.getItem('nameError')) {
+            alert("Name has been used by others 😥. Please choose another username 🙏");
+            
+            // $('#nameError').show();
+
+            let sessionPhoto = sessionStorage.getItem('photo');
+
+            $(`input[value='${sessionPhoto}']`).prop('checked', true);
+            $('#photo').prop('src', sessionPhoto);
+
+            sessionStorage.removeItem('nameError');
+        }
 
     // uploadBtn.addEventListener("click", function () {
     //   const reader = new FileReader();

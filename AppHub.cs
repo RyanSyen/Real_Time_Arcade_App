@@ -592,30 +592,6 @@ namespace Assignment
                 return;
             }
 
-            // if (group.Status != "Drawing" || message == "" || group.DrawerScoreHistory.ContainsKey(username)) {
-            //     return;
-            // }
-
-            
-
-            // if it was in Drawing state
-            // and the word is the same as answer, display warning message
-            // =======
-            // if it was in DrawingReady state, and user is drawer
-            // and the word is the same as answer, display warning message
-            // if ((group.Status == "Drawing" && message.ToLower().Contains(group.WordsNow)) ||
-            //     (group.Status == "DrawingReady" && username == drawer && message.ToLower().Contains(group.WordsNow))) {
-            //     // Send warning to simple chat
-            //     await Clients.Caller.SendAsync("ReceiveWarningMessage");
-            // }
-            // else {
-            //     // Send to simple chat container
-            //     await Clients.Group(groupId).SendAsync("ReceiveMessage", message, username, "#simpleChat");
-            // }
-
-            //await Clients.Group(groupId).SendAsync("ReceiveMessage", message, username, "#simpleChat");
-
-
             if ((group.Status == "Drawing" && message.ToLower().Contains(group.WordsNow)) ||
                 (group.Status == "DrawingReady" && username == drawer && message.ToLower().Contains(group.WordsNow))) {
                 // Send warning to simple chat
@@ -654,54 +630,6 @@ namespace Assignment
 
             
         }
-
-        // Send Answer Chat Message
-        // ===================================================================================================
-        // public async Task SendAnswerMessage(string message) 
-        // {   
-        //     // groupId querystring
-        //     string groupId = Context.GetHttpContext().Request.Query["groupId"];
-        //     string username = Context.GetHttpContext().Request.Query["username"];
-        //     Group group = groupList[groupId];
-        //     string word = group.WordsNow;
-        //     string drawer = group.DrawerNow;
-
-        //     // if it was not in drawing state
-        //     // and message is empty
-        //     // then do nothing
-        //     if (group.Status != "Drawing" || message == "" || group.DrawerScoreHistory.ContainsKey(username)) {
-        //         return;
-        //     }
-
-        //     // if user guess correct
-        //     if (message.ToLower() == word) {
-
-        //         // Add to score history
-        //         group.AddScoreHistory(username);
-
-        //         // sent the caller a correct message
-        //         await Clients.Caller.SendAsync("ReceiveCorrectMessage", word);
-                
-        //         // tell other the caller has hit the answer
-        //         await Clients.OthersInGroup(groupId).SendAsync("ReceiveHitMessage", username);
-
-        //         // Refresh the user list
-        //         await RefreshUserList(groupId);
-
-        //         // if some user reached above ScoreMaximum, go to Winner State
-        //         if (group.UserScore.Values.Max() >= ScoreMaximum) {
-        //             await Winner();
-        //         }
-        //         else if (group.AllUserGuessedCorrect()) {
-        //             // if all user has guessed correct, change to AnswerCorrect state
-        //             await AnswerCorrect();
-        //         }
-        //     }
-        //     else {
-        //         // Send to answer chat container
-        //         await Clients.Group(groupId).SendAsync("ReceiveMessage", message, username, "#answerChat");
-        //     }
-        // }
 
         public async Task ReportDrawer() {
             // groupId querystring

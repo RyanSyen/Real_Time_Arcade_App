@@ -1,4 +1,4 @@
-<!-- Button trigger modal -->
+<!-- Button trigger modal
 <button
   type="button"
   class="btn btn-primary"
@@ -8,7 +8,6 @@
   Launch demo modal
 </button>
 
-<!-- Modal -->
 <div
   class="modal fade"
   id="exampleModalCenter"
@@ -45,4 +44,45 @@
   $("#myModal").on("shown.bs.modal", function () {
     $("#myInput").trigger("focus");
   });
-</script>
+</script> -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test</title>
+    <style>
+      .img-block {
+        position: absolute;
+        top: 10%;
+        right: 10%;
+        background-color: red;
+        width: 500px;
+        height: 500px;
+      }
+      .img1 img {
+        width: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="button">Click</button>
+    <div class="img1">
+      <img src="images/favicon.png" alt="" />
+    </div>
+
+    <div class="img-block"></div>
+
+    <script src="js/jquery.slim.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      $(".button").click(function () {
+        var images = $(".img1 img").attr('src');
+        alert(images);
+      });
+    </script>
+  </body>
+  
+</html>
