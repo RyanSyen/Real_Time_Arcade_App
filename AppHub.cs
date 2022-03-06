@@ -581,20 +581,20 @@ namespace Assignment
         // ===================================================================================================
         public async Task SendSimpleMessage(string message) 
         {   
-            // groupId querystring
+            // // groupId querystring
             string groupId = Context.GetHttpContext().Request.Query["groupId"];
             string username = Context.GetHttpContext().Request.Query["username"];
             Group group = groupList[groupId];
             string drawer = group.DrawerNow;
             string word = group.WordsNow;
             // if empty string, do nothing
-            // if (message == "") {
-            //     return;
-            // }
-
-            if (group.Status != "Drawing" || message == "" || group.DrawerScoreHistory.ContainsKey(username)) {
+            if (message == "") {
                 return;
             }
+
+            // if (group.Status != "Drawing" || message == "" || group.DrawerScoreHistory.ContainsKey(username)) {
+            //     return;
+            // }
 
             
 
@@ -603,19 +603,29 @@ namespace Assignment
             // =======
             // if it was in DrawingReady state, and user is drawer
             // and the word is the same as answer, display warning message
+            // if ((group.Status == "Drawing" && message.ToLower().Contains(group.WordsNow)) ||
+            //     (group.Status == "DrawingReady" && username == drawer && message.ToLower().Contains(group.WordsNow))) {
+            //     // Send warning to simple chat
+            //     await Clients.Caller.SendAsync("ReceiveWarningMessage");
+            // }
+            // else {
+            //     // Send to simple chat container
+            //     await Clients.Group(groupId).SendAsync("ReceiveMessage", message, username, "#simpleChat");
+            // }
+
+            //await Clients.Group(groupId).SendAsync("ReceiveMessage", message, username, "#simpleChat");
+
+
             if ((group.Status == "Drawing" && message.ToLower().Contains(group.WordsNow)) ||
                 (group.Status == "DrawingReady" && username == drawer && message.ToLower().Contains(group.WordsNow))) {
                 // Send warning to simple chat
                 await Clients.Caller.SendAsync("ReceiveWarningMessage");
             }
-            else {
-                // Send to simple chat container
-                await Clients.Group(groupId).SendAsync("ReceiveMessage", message, username, "#simpleChat");
-            }
 
             // if user guess correct
             if (message.ToLower() == word) {
 
+                
                 // Add to score history
                 group.AddScoreHistory(username);
 
@@ -639,8 +649,10 @@ namespace Assignment
             }
             else {
                 // Send to answer chat container
-                await Clients.Group(groupId).SendAsync("ReceiveMessage", message, username, "#answerChat");
+                await Clients.Group(groupId).SendAsync("ReceiveMessage", message, username, "#simpleChat");
             }
+
+            
         }
 
         // Send Answer Chat Message
@@ -741,7 +753,7 @@ namespace Assignment
             group.CanvasURL = null;
             await Clients.Group(groupId).SendAsync("ReceiveClear");
             // Set Drawer Logo beside user
-            await Clients.Group(groupId).SendAsync("SetDrawerLogo", drawer);
+            // await Clients.Group(groupId).SendAsync("SetDrawerLogo", drawer);
             // Display Drawing button to drawer
             await Clients.Client(drawerConId).SendAsync("TurnDrawingStatus", word, DrawingReadyTime, DrawingLosesTurnTime);
             // Display who's turn to guesser

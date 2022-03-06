@@ -1020,15 +1020,6 @@
 
     <!-- Message Notification -->
     <div class="notification" id="notification">
-      <!-- <div class="chat-notification" data-notify="Chan Sin Yow">
-            <span class="chat-caller">Sin Yow </span> send an <span class="chat-keyword"> image </span> to you <i class="fas fa-times notification-close"></i>
-        </div>
-        <div class="chat-notification" data-notify="Chan Sin Yow">
-            <span class="chat-caller">Sin Yow </span> send a <span class="chat-keyword"> youtube video </span> to you <i class="fas fa-times notification-close"></i>
-        </div>
-        <div class="chat-notification" data-notify="Chan Sin Yow">
-            <span class="chat-caller">Sin Yow </span> send a  <span class="chat-keyword"> message </span> to you <i class="fas fa-times notification-close"></i>
-        </div> -->
     </div>
 
     <script src="js/jquery-3.5.1.min.js"></script>
@@ -1039,19 +1030,6 @@
     <script src="https://unpkg.com/vue-emoji-picker/dist/vue-emoji-picker.js"></script>
 
     <script>
-      
-      // //
-
-      // //to reveal modal when create game btn is clicked
-      // document.getElementById('publicGameBtn').addEventListener('click', function(){
-      //   document.querySelector('.selection-modal').style.display = 'flex';
-      // });
-
-      // //this is to close the modal
-      // document.querySelector('.close-button').addEventListener('click', function(){
-      //   document.querySelector('.selection-modal').style.display = 'none';
-      // });
-
       $('.create-room-btn').mouseover(function(){
         $('.text').css({'opacity': '1'});
       });
@@ -1404,8 +1382,6 @@
               </span>
 
             </div>
-          
-                        
                      `);
         }
 
@@ -1422,17 +1398,6 @@
                 `);
         }
       });
-
-      // if ( $("#emptyRoomMessage").css('display') == 'none'){
-      //   $("#gameRoom").append(`
-      //                   <div data-groupid="${group.groupId}">
-      //                       <div>${group.groupId}</div>
-      //                       <div><i class="fas fa-user-alt"></i><span>${
-      //                         Object.keys(group.userScore).length
-      //                       }</span> / 5</div>
-      //                   </div>
-      //               `);
-      // }
 
       // Remove Game Room
       con.on("RemoveGameRoom", (groupId, memberCount) => {

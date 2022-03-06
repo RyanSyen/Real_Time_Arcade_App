@@ -34,7 +34,7 @@
                 /* 'topleft topleft tools tools tools tools' */
                 'tools tools tools tools tools tools'
                 'user user canvas canvas canvas chat'
-                'gameState gameState status status status chat';
+                'user user status status status chat';
                 /* 'gameState gameState chat chat chat chat'; */
             grid-template-columns: 100px 100px 170px 170px 170px 250px;
             grid-template-rows: auto calc(90px * 4) 130px 250px;
@@ -71,51 +71,6 @@
         .gameState  { grid-area: gameState; }
         .chat       { grid-area: chat;      }
 
-        /* .topleft {
-            display: flex;
-        }
-
-        .topleft > .exit-and-copylink {
-            flex-basis: 17%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            text-align: center;
-            border-right: 1px solid white;
-        }
-
-        .topleft > .exit-and-copylink > div {
-            padding: 0.6em 0;
-            cursor: pointer;
-        }
-
-        .topleft > .exit-and-copylink > .exit {
-            background-color: #b51b10;
-            border-bottom: 1px solid white;
-        }
-
-        .topleft > .exit-and-copylink > .exit:hover {
-            background-color: #bf1d11;
-        }
-
-        .topleft > .exit-and-copylink > .copylink {
-            background-color: #a8740f;
-        }
-
-        .topleft > .exit-and-copylink > .copylink:hover {
-            background-color: #b07a10;
-        }
-
-        .topleft > .private-chat-btn {
-            flex-basis: 83%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-        } */
 
         .user {
             display: flex;
@@ -208,7 +163,7 @@
 
         .user > .userlist > .action-container {
             flex-basis: 15%;
-            border-left: 1.5px solid #CF9FFF ;
+            /* border-left: 1.5px solid #CF9FFF ; */
             display: flex;
             flex-direction: column;
         }
@@ -308,28 +263,23 @@
             width: 100%;
         }
 
+
+        /*     CHAT - v1     */
         .chat {
             display: flex;
         }
 
-        /* .chat > div {
+        .chat > div {
             display: flex;
             flex-direction: column;
-            flex-basis: 50%;
-            width: 50%;
-            border: 1px solid grey;
-            padding: 0.5em;
-        } */
-        
-        /* .chat > div > div {
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        } */
+           
+        }
 
         .chat > div > div:first-child {
             flex-basis: 87%;
             padding: 0.3em;
-            overflow-y: auto;
-            overflow-wrap: break-word;
+            overflow-y: auto; 
+            overflow-wrap: break-word; 
             position: relative;
         }
 
@@ -353,20 +303,28 @@
             position: relative;
         }
 
-        .chat > div > form:last-child > input[type=text] {
+      
+        .simple-chat{
             height: 100%;
-            width: 90%;
+            width: 100%;
+        }
+
+        .chat > div > form:last-child > input[type=text] {
+            height: 60%;
+            width: 85%;
             padding: 0.5em;
             background-color: #2c3347;
             border-radius: 5px;
             border: 1px solid #8c8c8c;
             color: white;
+            position: absolute;
+            bottom: 0;
         }
 
         .chat > div > form:last-child > button {
             position: absolute;
-            height: 100%;
-            width: 10%;
+            height: 60%;
+            width: 15%;
             right: 0;
             bottom: 0;
             background-color: #2c3347;
@@ -1114,6 +1072,18 @@
             border: 1px solid grey;
             display: none;
         }
+
+        .leave{
+            position:absolute;
+            top:0;
+            left:0;
+            height: 40px;
+            width: 40px;
+            margin: 20px;
+            cursor: pointer;
+        }
+
+
     </style>
     <script src="js/login.js"></script>
     <script src="js/checkgroup.js"></script>
@@ -1121,17 +1091,6 @@
 
 <body>
     <div class="container" style="display: none;" id="container">
-        <!-- <div class="topleft">
-            <div class="exit-and-copylink">
-                <div id="exit" class="exit" title="exit">
-                    <i class="fas fa-times"></i>
-                </div>
-                <div id="copylink" class="copylink" title="copy link">
-                    <i class="fas fa-share-alt"></i>
-                </div>
-            </div>
-            <button class="private-chat-btn" data-toggle="#myModal">Private Chat</button>
-        </div> -->
         <div class="tools">
             <div class="toolset">
                 <input id="pencil" type="radio" name="toolset" value="pencil">
@@ -1210,34 +1169,9 @@
                 </div>
             </div>
         </div>
-        <div class="user">
-            <!-- <div class="userlist">
-                <div class="photo-container">
-                    <img class="photo" src="avatar/row-1-col-1.png">
-                    <div class="fa-crown-container"><i class="fas fa-crown"></i></div>
-                </div>
-                <div class="user-detail-container">
-                    <div class="username">
-                        Sin Yow Chan 1
-                    </div>
-                    <div class="score">
-                        20 score
-                    </div>
-                </div>
-                <div class="action-container">
-                </div>
-            </div> -->
-        </div>
+        <div class="user"> </div>
         <div class="status">
-
-            <div class="status-container" id="statusContainer">
-            </div>
-
-            <!-- <div class="status-container">
-                <div class="second-status">
-                    Drawer ??? get reported 
-                </div>
-            </div> -->
+            <div class="status-container" id="statusContainer"></div>
 
             <div class="progress-bar">
                 <div class="bar">
@@ -1250,44 +1184,29 @@
             </canvas>
             <div id="pencilCursor"></div>
             <div id="eraserCursor"></div>
-            <svg id="svg" width="100%" height="100%" fill="transparent">
-
-            </svg>
+            <svg id="svg" width="100%" height="100%" fill="transparent"> </svg>
         </div>
-        <div class="gameState">
-            <div class="gameState-parent" id="gameState">
-                <div class="color-lightgrey" style="border-bottom: 1px solid grey; text-align: center;">Game Status</div>
-            </div>
-        </div>
+        
         <div class="chat">
-            <!-- <div class="answer-chat">
-                <div id="answerChat">
-                    <div class="color-lightgrey" style="border-bottom: 1px solid grey;">Write Answer Here...</div>
-                </div>
-                
-                <form id="answerChatForm" autocomplete="off">
-                    <input id="answerChatText" type="text" placeholder="Wait for guessing time" disabled maxlength="50">
-                    <button id="answerChatBtn" disabled><i class="fas fa-paper-plane"></i></button>
-                </form>
-            </div> -->
             <div class="simple-chat">
                 <div id="simpleChat">
-                    <div class="color-lightgrey" style="border-bottom: 1px solid grey;">Chit Chat Here...</div>
+                    <div class="color-lightgrey" style="border-bottom: 1px solid grey;">ChatRoom</div>
                 </div>
                 
                 <form id="simpleChatForm" autocomplete="off">
-                    <input id="simpleChatText" type="text" placeholder="ChitChat" maxlength="50">
+                    <input id="simpleChatText" type="text" placeholder="Chat" maxlength="50">
                     <button id="simpleChatBtn"><i class="fas fa-paper-plane"></i></button>
                 </form>
             </div>
         </div>
     </div>
 
-    <div id="copyPopup">
-        Copied!
+    <div class="leave">
+        <img src="images/logout.png" alt="logout"class="leave-img">
+        <p class="textt" style="color:#CF9FFF; opacity: 0; position: relative; left: 50px; top: -55px;">Leave Room</p>
     </div>
     
-    <!-- <span class="close" data-dismiss="#myModal">&times;</span> -->
+
     <!-- The Modal -->
     <div id="myModal" class="modal">
         <!-- Modal content -->
@@ -1300,20 +1219,6 @@
                     <div class="header-name-container" id="header-name"></div>
                 </div>
                 <div class="modal-body" id="chatList">
-                    <!-- 
-                    <div class="chat-user" data-chat="Chan Sin Yow">
-                        <div class="body-avatar-container">
-                            <img class="photo" src="avatar/empty.png">
-                        </div>
-                        <div class="empty-container">
-                            Namee 1
-                        </div>
-                        <div class="notify">
-                            <div class="notify-count">
-                                1
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
             <div class="right-container">
@@ -1367,15 +1272,6 @@
 
     <!-- Message Notification -->
     <div class="notification" id="notification">
-        <!-- <div class="chat-notification" data-notify="Chan Sin Yow">
-            <span class="chat-caller">Sin Yow </span> send an <span class="chat-keyword"> image </span> to you <i class="fas fa-times notification-close"></i>
-        </div>
-        <div class="chat-notification" data-notify="Chan Sin Yow">
-            <span class="chat-caller">Sin Yow </span> send a <span class="chat-keyword"> youtube video </span> to you <i class="fas fa-times notification-close"></i>
-        </div>
-        <div class="chat-notification" data-notify="Chan Sin Yow">
-            <span class="chat-caller">Sin Yow </span> send a  <span class="chat-keyword"> message </span> to you <i class="fas fa-times notification-close"></i>
-        </div> -->
     </div>
 
 
@@ -1386,6 +1282,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
     <script src="https://unpkg.com/vue-emoji-picker/dist/vue-emoji-picker.js"></script>
     <script>
+        $('.leave-img').mouseover(function(){
+            $('.textt').css({'opacity': '1'});
+        });
+
+        $('.leave-img').mouseleave(function(){
+            $('.textt').css('opacity', '0');
+        });
+
+        $(".leave-img").on("click", (e) => {
+            window.location = "gameroom.html";
+      });
+
         // Canvas Property ======================================================================================================
         let canvas = document.getElementById('ctx');
         let ctx = canvas.getContext('2d');
@@ -2180,12 +2088,12 @@
                             ${(username == sessionStorage.getItem('name')) 
                                 ?   `<div>
                                     <!--<i class="fas fa-arrow-left"></i>-->
-                                    <i class="fas fa-gamepad" style="font-size:24px; color: #0096FF; padding: 5px;"></i>
+                                    <i class="fas fa-gamepad" style="font-size:24px; color: yellow; padding: 5px;"></i>
                                     </div>` 
                                 :   ``}
                             ${(drawer == username)
-                                ?   `<div id="drawerLogo">
-                                        <i class="fas fa-pencil-ruler"></i>
+                                ?   `<div class="drawerLogo">
+                                    <i class="fa-solid fa-paintbrush-pencil"></i>
                                     </div>` 
                                 :   ``}
                         </div>
@@ -2333,7 +2241,7 @@
         function playDrawerSound() {
             // play audio
             // since chrome 66 does not allow play audio without interaction, ignores it then
-            var audio = new Audio('audio/takedrawer.wav');
+            var audio = new Audio('audio/feedback.wav');
             audio.volume = 0.4;
             audio.play();
         }
@@ -2510,24 +2418,15 @@
 
             $('#statusContainer').html(`
                 <div class="second-status">
-                    Wait for owner to start ...
+                    Wait for host to start ...
                 </div>
             `);
         });
 
-
-        // Set Drawer Logo beside user
-        con.on('SetDrawerLogo', (drawer) => {
-            $(`.userlist[data-user="${sanitize(drawer)}"] > .action-container`).append(`
-                <div id="drawerLogo">
-                    <i class="fas fa-pencil-ruler"></i>
-                </div>
-            `);
-        });
 
         // Set Interval after drawing state
         con.on('InsertInterval', () => {
-            appendChat('#answerChat', 
+            appendChat('#simpleChat', 
             `
                 <div style="color: #b3b3b3; font-weight: bold;">
                     <i class="fas fa-clock"></i>
@@ -2581,7 +2480,7 @@
             `);
 
             // remove drawing logo beside user
-            $('#drawerLogo').remove();
+            $('.drawerLogo').remove();
         
             progressBar(timeTaken, percentage);
         });
@@ -2617,8 +2516,10 @@
             `);
 
             // allow the text box to send answer
-            $('#answerChatText').prop('disabled', false).prop('placeholder', 'Answer');
-            $('#answerChatBtn').prop('disabled', false);
+            // $('#answerChatText').prop('disabled', false).prop('placeholder', 'Answer');
+            // $('#answerChatBtn').prop('disabled', false);
+            $('#simpleChatText').prop('disabled', false).prop('placeholder', 'Chat');
+            $('#simpleChatBtn').prop('disabled', false);
 
             progressBar(timeTaken, percentage);
 
@@ -2637,7 +2538,7 @@
             disableAnswerChat();
 
             // remove drawing logo beside user
-            $('#drawerLogo').remove();
+            $('.drawerLogo').remove();
 
             progressBar(timeTaken, percentage);
         });
@@ -2655,7 +2556,7 @@
             disableAnswerChat();
 
             // remove drawing logo beside user
-            $('#drawerLogo').remove();
+            $('.drawerLogo').remove();
 
             progressBar(timeTaken, percentage);
         });
@@ -2676,7 +2577,7 @@
             disableAnswerChat();
 
             // remove drawing logo beside user
-            $('#drawerLogo').remove();
+            $('.drawerLogo').remove();
 
             progressBar(timeTaken, percentage);
         })
@@ -2698,7 +2599,7 @@
             disableAnswerChat();
 
             // remove drawing logo beside user
-            $('#drawerLogo').remove();
+            $('.drawerLogo').remove();
 
             progressBar(timeTaken, percentage);
         })
@@ -2757,20 +2658,6 @@
 
         // GAME STATE ========================================================================================
         con.on('UserJoinGame', (username) => {
-            appendChat('#gameState', 
-            `
-                <div class="gameState-container">
-                    <div class="gameState-title">
-                        <i class="fas fa-user-plus"></i> New Gamer
-                    </div> 
-                    <div class="gameState-desc">
-                        <div>
-                            <span class="color-orange">${sanitize(username)}</span> joined. 
-                        </div> 
-                    </div>
-                </div>
-            `  
-            );
 
             appendChat('#simpleChat', 
             `
@@ -2783,20 +2670,6 @@
         });
 
         con.on('UserQuitGame', (username) => {
-            appendChat('#gameState', 
-            `
-                <div class="gameState-container">
-                    <div class="gameState-title">
-                        <i class="fas fa-user-slash"></i> Gamer Quitted
-                    </div> 
-                    <div class="gameState-desc">
-                        <div>
-                            <span class="color-orange"> ${sanitize(username)} </span> quitted. 
-                        </div> 
-                    </div>
-                </div>
-            `  
-            );
 
             appendChat('#simpleChat', 
             `
@@ -2809,7 +2682,7 @@
         });
 
         con.on('HostChangedGame', (host) => {
-            appendChat('#gameState', 
+            appendChat('#simpleChat', 
             `
                 <div class="gameState-container">
                     <div class="gameState-title">
@@ -2826,7 +2699,7 @@
         });
 
         con.on("ReadyGame", () => {
-            appendChat('#gameState', 
+            appendChat('#simpleChat', 
             `
                 <div class="gameState-container">
                     <div class="gameState-title">
@@ -2840,26 +2713,24 @@
         });
 
         con.on('DrawingReadyGame', (drawer) => {
-            appendChat('#gameState', 
+            appendChat('#simpleChat', 
             `
                 <div class="gameState-container">
-                    <div class="gameState-title">
-                        <i class="fas fa-dice"></i> DrawingReady State
-                    </div> 
+                    
                     <div class="gameState-desc">
-                        <div><span class="color-orange">${sanitize(drawer)}</span> is in turn to draw. </div> 
+                        <div><span class="color-orange">${sanitize(drawer)}</span> 's turn to draw. </div> 
                     </div>
                 </div>  
             `);
         });
 
         con.on('DrawingLosesTurnGame', (drawer) => {
-            appendChat('#gameState', 
+            // appendChat('#gameState', 
+
+            appendChat('#simpleChat',
             `
                 <div class="gameState-container">
-                    <div class="gameState-title">
-                        <i class="fas fa-dice"></i> DrawingLosesTurn State
-                    </div> 
+                    
                     <div class="gameState-desc">
                         <div><span class="color-orange">${sanitize(drawer)}</span> loses its turn. </div> 
                     </div>
@@ -2868,12 +2739,10 @@
         });
 
         con.on('DrawingGame', (drawer) => {
-            appendChat('#gameState', 
+            appendChat('#simpleChat', 
             `
                 <div class="gameState-container">
-                    <div class="gameState-title">
-                        <i class="fas fa-dice"></i> Drawing State
-                    </div> 
+                    
                     <div class="gameState-desc">
                         <div><span class="color-orange">${sanitize(drawer)}</span> is drawing. </div> 
                     </div>
@@ -2882,12 +2751,10 @@
         });
 
         con.on('DrawingSkippedGame', (drawer) => {
-            appendChat('#gameState', 
+            appendChat('#simpleChat', 
             `
                 <div class="gameState-container">
-                    <div class="gameState-title">
-                        <i class="fas fa-dice"></i> DrawingSkipped State
-                    </div> 
+                    
                     <div class="gameState-desc">
                         <div><span class="color-orange">${sanitize(drawer)}</span> skipped its turn. </div> 
                     </div>
@@ -2896,12 +2763,10 @@
         });
 
         con.on('DrawingReportedGame', (drawer) => {
-            appendChat('#gameState', 
+            appendChat('#simpleChat', 
             `
                 <div class="gameState-container">
-                    <div class="gameState-title">
-                        <i class="fas fa-dice"></i> DrawingReported State
-                    </div> 
+                    
                     <div class="gameState-desc">
                         <div><span class="color-orange">${sanitize(drawer)}</span> gets reported. </div> 
                     </div>
@@ -2910,12 +2775,10 @@
         });
 
         con.on('AnswerGame', (word) => {
-            appendChat('#gameState', 
+            appendChat('#simpleChat', 
             `
                 <div class="gameState-container">
-                    <div class="gameState-title">
-                        <i class="fas fa-dice"></i> Answer State
-                    </div> 
+                    
                     <div class="gameState-desc">
                         <div>Not everyone got the answer...</div> 
                         <div>The answer is <span style="color: yellowgreen">${word}</span>. </div> 
@@ -2925,12 +2788,10 @@
         });
 
         con.on('AnswerCorrectGame', (word) => {
-            appendChat('#gameState', 
+            appendChat('#simpleChat', 
             `
                 <div class="gameState-container">
-                    <div class="gameState-title">
-                        <i class="fas fa-dice"></i> AnswerCorrect State
-                    </div> 
+                    
                     <div class="gameState-desc">
                         <div>Everyone got the answer!</div> 
                         <div>The answer is <span style="color: yellowgreen">${word}</span>. </div> 
@@ -2940,12 +2801,10 @@
         });
 
         con.on('WinnerGame', (topThreeUser) => {
-            appendChat('#gameState', 
+            appendChat('#simpleChat', 
             `
                 <div class="gameState-container">
-                    <div class="gameState-title">
-                        <i class="fas fa-dice"></i> Winner State
-                    </div> 
+                    
                     <div class="gameState-desc">
                         ${
                             $.map(topThreeUser, (user, i) => {
@@ -2960,7 +2819,7 @@
         });
 
         con.on('ScoreResetGame', () => {
-            appendChat('#gameState', 
+            appendChat('#simpleChat', 
             `
                 <div class="gameState-container">
                     <div class="gameState-title">
@@ -2971,7 +2830,7 @@
         });
 
         con.on('GroupResetGame', () => {
-            appendChat('#gameState', 
+            appendChat('#simpleChat', 
             `
                 <div class="gameState-container">
                     <div class="gameState-title">
@@ -2982,7 +2841,7 @@
         });
 
         con.on('DrawerReportGame', (drawer, username, reportCount, memberCount) => {
-            appendChat('#gameState', 
+            appendChat('#simpleChat', 
             `
                 <div class="gameState-container">
                     <div class="gameState-title"><i class="fas fa-bullhorn"></i> Report</div> 
@@ -3092,21 +2951,21 @@
             con.invoke("SendSimpleMessage", message);
         });
 
-        $('#answerChatForm').on('submit', e => {
-            e.preventDefault();
+        // $('#answerChatForm').on('submit', e => {
+        //     e.preventDefault();
 
-            let message = $('#answerChatText').val().trim();
-            $('#answerChatText').val('');
+        //     let message = $('#answerChatText').val().trim();
+        //     $('#answerChatText').val('');
 
-            if (!message) { return; } // if message is empty
-            if (isSpam('#answerChat')) { return; } // if it was a spam
+        //     if (!message) { return; } // if message is empty
+        //     if (isSpam('#answerChat')) { return; } // if it was a spam
 
-            con.invoke("SendAnswerMessage", message); // -> apphub
-        });
+        //     con.invoke("SendAnswerMessage", message); // -> apphub
+        // });
 
         // for input focus
         $('#simpleChat').on('click', () => $('#simpleChatText').focus());
-        $('#answerChat').on('click', () => $('#answerChatText').focus());
+        // $('#answerChat').on('click', () => $('#answerChatText').focus());
     </script>
 
     <!-- Modal Display -->
