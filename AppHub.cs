@@ -245,13 +245,30 @@ namespace Assignment
         // The maximum score to win
         private static int ScoreMaximum = 70;
 
+        private static int count = 0;
+
         // ===================================================================================================
+        
+        // public async Task SendText(string username, string message)
+        // {
+        //     await Clients.Caller.SendAsync("ReceiveText", username, message, "caller");
+        //     await Clients.Others.SendAsync("ReceiveText", username, message, "others");
+        // }
+        
         public override async Task OnConnectedAsync()
         {
+
             // username querystring
             string username = Context.GetHttpContext().Request.Query["username"];
             string photo = Context.GetHttpContext().Request.Query["photo"];
             string groupId = Context.GetHttpContext().Request.Query["groupId"];
+
+            //chat.html
+            // if (username != null)
+            // {
+            //     count++;
+            //     await Clients.All.SendAsync("UpdateStatus", count, $"<b>{username}</b> joined");
+            // }
 
             // if duplicate name found, redirect back to home page.
             // and do nothing
@@ -391,6 +408,15 @@ namespace Assignment
             string username = Context.GetHttpContext().Request.Query["username"];       // username querystring
             string groupId  = Context.GetHttpContext().Request.Query["groupId"];
             bool   isDrawerDisconnected = false;
+
+            //chat.html
+            //  if (username != null)
+            // {
+            //     count--;
+            //     await Clients.All.SendAsync("UpdateStatus", count, $"<b>{username}</b> left");
+            // }
+
+            await base.OnDisconnectedAsync(exception);
 
             // if duplicate, dont have to do anything
             if (isDuplicate) {
@@ -1005,10 +1031,18 @@ namespace Assignment
         }
 
         // Send image in private chat
-        public async Task SendImage(string url, string selectedUserChat)
+        public async Task SendImage( string url, string selectedUserChat)
         {
+            //param string usernname
+            
             // username querystring
             string username = Context.GetHttpContext().Request.Query["username"];
+
+            //chat.html
+            // await Clients.Caller.SendAsync("ReceiveImage", username, url, "caller");
+            // await Clients.Others.SendAsync("ReceiveImage", username, url, "others");
+
+            
 
             await Clients.Caller.SendAsync("ReceiveChatImage", username, url, "caller");
             await Clients.Client(cd[selectedUserChat].ConnectionId).SendAsync("ReceiveChatImage", username, url, "others");
@@ -1022,10 +1056,17 @@ namespace Assignment
         }
 
         // Send youtube video in private chat
-        public async Task SendYouTube(string id, string selectedUserChat)
+        public async Task SendYouTube( string id, string selectedUserChat)
         {
+
             // username querystring
             string username = Context.GetHttpContext().Request.Query["username"];
+
+            //chat.html
+            // await Clients.Caller.SendAsync("ReceiveYouTube", username, id, "caller");
+            // await Clients.Others.SendAsync("ReceiveYouTube", username, id, "others");
+            
+            
 
             await Clients.Caller.SendAsync("ReceiveChatYouTube", username, id, "caller");
             await Clients.Client(cd[selectedUserChat].ConnectionId).SendAsync("ReceiveChatYouTube", username, id, "others");

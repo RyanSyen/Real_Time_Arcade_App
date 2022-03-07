@@ -35,7 +35,7 @@ namespace Assignment
 
             app.UseEndpoints(endpoints =>
             {
-                // endpoints.MapHub<ChatHub>("/chathub");
+                endpoints.MapHub<ChatHub>("/chathub");
                 // endpoints.MapHub<DrawHub>("/drawhub");
                 // endpoints.MapHub<GameHub>("/gamehub");
                 endpoints.MapHub<AppHub>("/apphub");

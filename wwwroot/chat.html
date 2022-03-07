@@ -1,15 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatRT 1.0 + 2.0</title>
+    <title>Chat Room</title>
     <link href="images/favicon.png" rel="shortcut icon">
-    <link href="css/app.css" rel="stylesheet">
-
+    <link href="css/chatt.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+        integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/global.css">
     <style>
-        /* TODO(2.4) : Image CSS*/
+        body {  
+            width: 70%;
+            margin: auto;
+            display: flex;
+            flex-direction: row;
+            flex: 1 1;
+        }
+
+        .box1 {
+            flex: 20%;
+            background-color: #C0C0C0;
+            border: 1px solid black;
+        }
+
+        .box2 {
+            display: flex;
+            flex-direction: column;
+            flex: 80%;
+            border: 1px solid black;
+        }
+
         .image {
             max-width: 200px;
             max-height: 200px;
@@ -17,81 +38,84 @@
             cursor: pointer;
         }
 
-        /* TODO(2.6) : Fullscreen CSS*/
         .image:fullscreen {
-            /*disable auto scalling -> small pictures wont be stretched and enlarged to fullscreen
-            it will just only scale down for big pictures*/
             object-fit: scale-down;
         }
 
-        /* TODO(2.7): Drag-and-drop CSS */
         .active {
             outline: 5px dashed red;
             outline-offset: -5px;
-            /* -5px -> line is inside*/
+        }
+
+        .profile-photo {
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-size: 1.2rem;
+            padding-right: 0.4em;
+        }
+
+        .box1{
+            border: 3px solid #BF40BF;
+            color: black;
+            font-size: large;
+        }
+
+        main{
+            background-color: whitesmoke;
         }
     </style>
 </head>
-
 <body>
-    <header>
-        <h1>ChatRT 1.0 + 2.0</h1>
-        <div>👧🏻 = <b id="count">0</b></div>
-    </header>
+    <div class="box1">
+        <p>Online User List</p>     
+    </div>
+    <div class="box2">
+        <header>
+            <h1>Chat</h1>
+        </header>
 
-    <main>
-        <ul id="chat"></ul>
-    </main>
+        <main>
+            <ul id="chat"></ul>         
+        </main>
 
-    <footer>
-        <form id="form" autocomplete="off">
-            <input type="text" id="message" placeholder="Enter Message" autofocus>
-            <button type="button" id="image">Image</button>
-            <button type="button" id="leave">Leave</button>
-            <input type="file" id="file" accept="image/*" hidden>
-            <!--will be triggered when user click the image button -->
-        </form>
-    </footer>
+        <footer>
+            <form id="form" autocomplete="off">
+                <input type="text" id="message" placeholder="Enter Message" autofocus>
+                <button type="button" id="image">Image</button>
+                <button type="button" id="leave">Leave</button>
+                <input type="file" id="file" accept="image/*" hidden>
+            </form>
+        </footer>
+    </div>
 
-    <!-- TODO: JavaScript Section -->
     <script src="js/jquery.slim.js"></script>
     <script src="js/signalr.js"></script>
-    <script src="js/app.js"></script> <!--image compression library coded by sir-->
-
+    <script src="js/chat.js"></script>
     <script>
-        //checking
-        //to get the session name. It will return either a value or null
-        const name = sessionStorage.getItem('name');
-        if (!name) {
-            //redirect them to index page which is the root location
+        const username = sessionStorage.getItem('name');
+
+       
+
+        if (!username) {
             location = '/';
-            throw 'Error: Invalid name'; //this will stop js execution and display console msg
-            //if we dont stop the execution, the following lines of code will still run
+            throw 'ERROR: Invalid name';
         }
 
-        //general events ==============================================================
         $('#leave').click(e => {
-            //remove session data
-            //sessionStorage.removeItem('name'); -> also works to remove specific elements
-            sessionStorage.clear(); //this clears the session storage entirely
+            sessionStorage.clear();
             location = '/';
-        })
+        });
 
-        //general functions ==============================================================
-
-        //auto scroll -> need to check from the main element
         const m = $('main')[0];
         let bottom = true;
 
-        //scrollTop -> determines how far you have scrolled (frm top) / the distance between the scroll bar to the top of the page
-
-        //clientHeight ->  view area
-        //if you scroll to the bottom, the clientHeight + scrollTop = scrollHeight
-
-        //scrollHeight represents the entire scrolling area
-
         function isBottom() {
-            bottom = (m.scrollTop + m.clientHeight + 10) >= m.scrollHeight; // check if we are near the end of the page
+            bottom = m.scrollTop + m.clientHeight + 10 >= m.scrollHeight;
         }
 
         function scrollToBottom() {
@@ -100,110 +124,94 @@
             }
         }
 
-        // TODO(2.1) : getImageURL (message) ===============================================
         function getImageURL(message) {
-            let re = /.(jpg|png|jpeg|webp|gif|bmp)$/i;
+            let re = /.(jpg|jpeg|png|webp|gif|bmp)$/i;
             try {
-                //try to convert string to image URL
-                //if msg entered is not a URL then go to catch which proceeds to return null which means the string is not an image url
                 let url = new URL(message);
                 if (re.test(url.pathname)) {
-                    return url.href; //return back the url
+                    return url.href;
                 }
-            } catch {
-                //do nothing
             }
+            catch {
 
+            }
             return null;
         }
 
-        // TODO(2.5) : getYouTubeId(message) ===============================================
         function getYouTubeId(message) {
             try {
                 let url = new URL(message);
                 if (url.hostname == 'www.youtube.com' && url.pathname == '/watch') {
                     return url.searchParams.get('v');
                 }
-
-            } catch {
-                //do nothing
             }
-            return null;
+            catch {
+
+            }
+            return null
         }
 
-        //connection setup for signalR OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-
-        const param = $.param({ name });
-
+        const param = $.param({ username });
+        
         const con = new signalR.HubConnectionBuilder()
-            .withUrl('/chathub?' + param)
-            .build(); //once build, then can start connection
+            .withUrl('/hub?' + param)
+            .build();
 
-        //CLIENT SIDE METHOD +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        con.on('ReceiveText', (name, message, who) => {
+        con.on('ReceiveText', (username, message, who, time) => {
+            //bad word filter (12 words)
+            let badwords = /fuck|shit|piss|dick|ass|asshole|bitch|bastard|damn|bollocks|bugger|rubbish/gi;
 
-            //text to emoji conversion
             message = message
-                .replaceAll(':)', '😊')
-                .replaceAll(':(', '🙁')
-                .replaceAll(';)', '😉')
-                .replaceAll(':D', '😃')
-                .replaceAll(':*', '😘')
-                .replaceAll(":'(", '😢')
-                .replaceAll(':O', '😮')
-                .replaceAll('<3', '❤️')
-                .replaceAll('-_-', '😑')
-                .replaceAll('B-)', '😎')
-                .replaceAll(':-((', '😭');
-
-
-            //escape HTMl code
-            message = $('<div>').text(message).html();
-
-            // TODO(2.1) : text-to-hyperlink transform ===============================================
+                .replaceAll('`smile`', '😊')
+                .replaceAll('`cry`', '😥')
+                .replaceAll('`heart`', '❤️')
+                .replaceAll('`thank`', '🙏')
+                .replaceAll('`strong`', '💪')
+                .replaceAll('`lovely`', '🥰')
+                .replaceAll('`fire`', '🔥')
+                .replaceAll('`laughing`', '🤣')
+                .replaceAll('`pleading`', '🥺')
+                .replaceAll('`sparkle`', '✨')
+                .replaceAll('`joy`', '😂')
+                .replaceAll('`crying`', '😭')
+                .replace(/\*(.*?)\*/g, "<b>$1</b>")
+                .replace(/_(.*?)_/g, "<u>$1</u>")
+                .replace(/~(.*?)~/g, "<i>$1</i>")
+                .replace(/-(.*?)-/g, "<del>$1</del>")
+                .replace(badwords, "****");
+                
             message = message.replace(
-                //look for hyperlink pattern
-                ///(?<=^|\s)(https?:\/\/\S+)(?=$|\s)/gi,
-
-                //best regex for URL
-                //https://mathiasbynens.be/demo/url-regex#:~:text=%40scottgonzales%20(1347%20chars)
-                /([a-z]([a-z]|\d|\+|-|\.)*):(\/\/(((([a-z]|\d|-|\.|_|~|[\x00A0-\xD7FF\xF900-\xFDCF\xFDF0-\xFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?((\[(|(v[\da-f]{1,}\.(([a-z]|\d|-|\.|_|~)|[!\$&'\(\)\*\+,;=]|:)+))\])|((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|(([a-z]|\d|-|\.|_|~|[\x00A0-\xD7FF\xF900-\xFDCF\xFDF0-\xFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=])*)(:\d*)?)(\/(([a-z]|\d|-|\.|_|~|[\x00A0-\xD7FF\xF900-\xFDCF\xFDF0-\xFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*|(\/((([a-z]|\d|-|\.|_|~|[\x00A0-\xD7FF\xF900-\xFDCF\xFDF0-\xFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\x00A0-\xD7FF\xF900-\xFDCF\xFDF0-\xFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)|((([a-z]|\d|-|\.|_|~|[\x00A0-\xD7FF\xF900-\xFDCF\xFDF0-\xFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\x00A0-\xD7FF\xF900-\xFDCF\xFDF0-\xFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)|((([a-z]|\d|-|\.|_|~|[\x00A0-\xD7FF\xF900-\xFDCF\xFDF0-\xFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)){0})(\?((([a-z]|\d|-|\.|_|~|[\x00A0-\xD7FF\xF900-\xFDCF\xFDF0-\xFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\xE000-\xF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\x00A0-\xD7FF\xF900-\xFDCF\xFDF0-\xFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?/,
-
-                // ? means the character s can be either 0 or 1
-                //to represent / we need \ so it should write \/
-                // \s in regex is to match for any whitespace character
-                // \S is to match any non-whitespace character
-                // \S+ -> will have at least one non-space characters
-                // g -> global replacement or global matching (multiple replacement)
-                // i -> case insensitive
-                //(?<=) -> look behind operation means to set a condition where it must be fulfilled in front of the string
-                // ^ -> means beginning of a string
-                // \s -> space
-                // (?=) -> look ahead operation, must match criteria after the URL
-                // $ -> means end of the string
-
-
+                /(?<=^|\s)(https?:\/\/\S+)(?=$|\s)/gi,
                 '<a href="$&" target="_blank">$&</a>'
-                // $& -> is the value matched from the regex
             );
 
+            let today = new Date();
+            let minutes = today.getMinutes();
+            minutes = minutes <= 9 ? '0' + minutes : minutes;
+            time = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + " [" + (today.getHours()%12) + ":" + minutes + "]";
 
-            //before can chat, we check if we are at the bottom of the page or not
             isBottom();
-
-            //chat interface ==============================================================
-            $('#chat').append(`
+            if(who == 'caller') {
+                $('#chat').append(`
+                    <li class="${who}">
+                        <div>
+                            <b>${username}:</b> ${message} <small style="color: grey;">${time} <i class="fas fa-check-double"></i></small>
+                        </div>
+                    </li>
+                `);
+            }
+            else {
+                $('#chat').append(`
                 <li class="${who}">
                     <div>
-                        <b>${name}:<b> ${message}
-                    </div>   
+                        <b>${username}:</b> ${message} <small style="color: grey;">${time} <i class="fas fa-check-double" style="color: black;"></i></small>
+                    </div>
                 </li>
             `);
-
+            }
             scrollToBottom();
         });
 
-        //update status (who joined and left)
         con.on('UpdateStatus', (count, status) => {
             $('#count').text(count);
 
@@ -216,121 +224,132 @@
             scrollToBottom();
         });
 
-        //TODO(2.3.1): ReceiveImage(name, url, who) -> client function of receive image
-        con.on('ReceiveImage', (name, url, who) => {
-            isBottom();
-            $('#chat').append(`
-                <li class="${who}">
-                    <div>
-                        <b> ${name}</b> sent an image <br>
-                        <img src="${url}" class="image" onload="scrollToBottom()">
-                    </div>
-                </li>  
-            `);
+        //--------------------------------------------------------
 
-            //cannot call scrollToBottom method, it doesnt work because images will take time to load. Hence, the function will be called first even before the image loaded
+        con.on('ReceiveImage', (username, url, who) => {
+            let today = new Date();
+            let minutes = today.getMinutes();
+            minutes = minutes <= 9 ? '0' + minutes : minutes;
+            time = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + " [" + (today.getHours()%12) + ":" + minutes + "]";
+
+            isBottom();
+            if(who == 'caller') {
+                $('#chat').append(`
+                    <li class="${who}">
+                        <div>
+                            <b>${username}</b> sent an image<br>
+                            <img src="${url}" class="image"
+                                onload="scrollToBottom()"><br>
+                            <small style="color: grey;">${time} <i class="fas fa-check-double"></i></small>
+                        </div>
+                    </li>
+                `);
+            }
+            else {
+                $('#chat').append(`
+                    <li class="${who}">
+                        <div>
+                            <b>${username}</b> sent an image<br>
+                            <img src="${url}" class="image"
+                                onload="scrollToBottom()"><br>
+                            <small style="color: grey;">${time} <i class="fas fa-check-double" style="color: black;"></i></small>
+                        </div>
+                    </li>
+                `);
+            }
         });
 
-        //TODO(2.5.1): ReceiveYouTube(name, id, who)
-        con.on('ReceiveYouTube', (name, id, who) => {
+        con.on('ReceiveYouTube', (username, id, who) => {
+            let today = new Date();
+            let minutes = today.getMinutes();
+            minutes = minutes <= 9 ? '0' + minutes : minutes;
+            time = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + " [" + (today.getHours()%12) + ":" + minutes + "]";
+
             isBottom();
-            $('#chat').append(`
-                <li class="${who}">
-                    <div>
-                        <b>${name}</b> sent a video<br>
-                        <iframe width="400" height="300" 
-                                src="https://www.youtube.com/embed/${id}" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen></iframe>
-                    </div>
-                </li>
-            `);
+            if(who == 'caller') {
+                $('#chat').append(`
+                    <li class="${who}">
+                        <div>
+                            <b>${username}</b> sent a video<br>
+                            <iframe width="400" height="300" 
+                                    src="https://www.youtube.com/embed/${id}" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen></iframe><br>
+                                    <small style="color: grey;">${time} <i class="fas fa-check-double"></i></small>
+                        </div>
+                    </li>
+                `);
+            }
+            else {
+                $('#chat').append(`
+                    <li class="${who}">
+                        <div>
+                            <b>${username}</b> sent a video<br>
+                            <iframe width="400" height="300" 
+                                    src="https://www.youtube.com/embed/${id}" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen></iframe><br>
+                                    <small style="color: grey;">${time} <i class="fas fa-check-double" style="color: black;"></i></small>
+                        </div>
+                    </li>
+                `);
+            }
             scrollToBottom();
         });
 
-        //iframe -> allow embeded youtube to display
-
-        //if connection to hub fail, then return error
         con.onclose(err => {
             sessionStorage.clear();
             location = '/';
-        })
+        });
 
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        con.start().then(main);
 
-        //start ==============================================================
-        con.start().then(mainFunction); // if the connection is successful then go to main function
-
-        function mainFunction() {
-
+        function main() {
+            
             $('#form').submit(e => {
                 e.preventDefault();
                 let message = $('#message').val().trim();
                 if (message) {
-                    //TODO(2.3): URL -> getImageURL(message)
-                    //TODO(2.5.2): id -> getYouTubeID(message)
-
                     let url = getImageURL(message);
-                    let id = getYouTubeId(message);
+                    let id  = getYouTubeId(message);
 
                     if (url) {
-                        //send image
-                        con.invoke('SendImage', name, url);
-                    } else if (id) {
-                        //send youtube
-                        con.invoke('SendYouTube', name, id);
-                    } else {
-                        //send the message to the hub
-                        con.invoke('SendText', name, message);  //first param of invoke is the name of the server function in the chathub.cs
+                        con.invoke('SendImage', username, url);
                     }
-
+                    else if (id) {
+                        con.invoke('SendYouTube', username, id);
+                    }
+                    else {
+                        con.invoke('SendText', username, message);
+                    }
                 }
-                //after user enter their name and press enter, we will clear the msg box for them by setting the val to empty
                 $('#message').val('').focus();
             });
 
-            // TODO(2.6): Request fullscreen
-            //cannot attach event handler directly to the image because image is dynamic and not yet loaded
-            //hence we attach the event to the chat box, the parent element
-            //then the event click is applied on the child class called image
             $('#chat').on('click', '.image', e => e.target.requestFullscreen());
 
-            // TODO(2.7): File Select
             $('#image').click(e => $('#file').click());
 
             $('#file').change(e => {
                 let f = e.target.files[0];
 
-                //check file is img
-                if (f && f.type.startsWith('image/')) {
+                if (f && f.type.startsWith('image/')) { 
 
-                    //sending file without resizing
-                    // let fr = new FileReader();
-                    // fr.onload = e => {
-                    //     let url = e.target.result; //result -> refer to the reading result from "fr.readAsDataURL(f)"
-                    //     con.invoke('SendImage', name, url);
-                    // };
-                    // //read data file, once finished loaded then only trigger the onload event
-                    // fr.readAsDataURL(f);
 
                     fit(f, 500, 500, 'dataURL', 'image/webp')
-                        .then(url => con.invoke('SendImage', name, url));
+                        .then(url => con.invoke('SendImage', username, url));
                 }
 
                 e.target.value = null;
             });
 
-            // TODO(2.8): Request fullscreen
-
-                //two events together
             $('main').on('dragenter dragover', e => {
                 e.preventDefault();
-                //whenever we drag an item that enter or over, the active class will be added into the element
                 $('main').addClass('active');
             });
 
-                //we drop the item then remove the highlighing
             $('main').on('dragleave drop', e => {
                 e.preventDefault();
                 $('main').removeClass('active');
@@ -340,16 +359,15 @@
                 e.preventDefault();
                 let f = e.originalEvent.dataTransfer.files[0];
 
-                if (f && f.type.startsWith('image/')) {
+                if (f && f.type.startsWith('image/')) { 
                     fit(f, 500, 500, 'dataURL', 'image/webp')
-                        .then(url => con.invoke('SendImage', name, url));
+                        .then(url => con.invoke('SendImage', username, url));
                 }
             });
 
-
+            $('#name, #header-name').text(sessionStorage.getItem('username'));
+            $('#photo, #header-avatar').prop('src', sessionStorage.getItem('photo'));
         }
-
     </script>
 </body>
-
 </html>

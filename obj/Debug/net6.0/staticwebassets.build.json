@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "dRtHPKVKXUSqKXRH3nKHiLemxtbqqDtMv635O0asoh0=",
+  "Hash": "M/pkR4kfLlOzp2ksNmubNqMtIoUWmjsz4MqHmoso0DM=",
   "Source": "assignment",
   "BasePath": "_content/assignment",
   "Mode": "Default",
@@ -32,6 +32,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\audio\\feedback.wav"
+    },
+    {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\audio\\message.wav",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "audio/message.wav",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\audio\\message.wav"
     },
     {
       "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\audio\\notification.wav",
@@ -238,6 +255,23 @@
       "OriginalItemSpec": "wwwroot\\chat.html"
     },
     {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\chatdemo.html",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "chatdemo.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\chatdemo.html"
+    },
+    {
       "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\Chathub_backup.txt",
       "SourceId": "assignment",
       "SourceType": "Discovered",
@@ -287,6 +321,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\app.css"
+    },
+    {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\css\\chatt.css",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "css/chatt.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\chatt.css"
+    },
+    {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\css\\emojionearea.min.css",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "css/emojionearea.min.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\emojionearea.min.css"
     },
     {
       "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\css\\global.css",
@@ -1309,6 +1377,23 @@
       "OriginalItemSpec": "wwwroot\\js\\app.js"
     },
     {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\js\\chat.js",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "js/chat.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\chat.js"
+    },
+    {
       "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\js\\checkgroup.js",
       "SourceId": "assignment",
       "SourceType": "Discovered",
@@ -1324,6 +1409,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\checkgroup.js"
+    },
+    {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\js\\emojionearea.min.js",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "js/emojionearea.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\emojionearea.min.js"
     },
     {
       "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\js\\image.js",
@@ -1426,6 +1528,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\vue.js"
+    },
+    {
+      "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\js\\webcam-easy.min.js",
+      "SourceId": "assignment",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\",
+      "BasePath": "_content/assignment",
+      "RelativePath": "js/webcam-easy.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\webcam-easy.min.js"
     },
     {
       "Identity": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\version2\\ryan1\\assignment\\wwwroot\\list.html",

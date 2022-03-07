@@ -312,7 +312,7 @@
         padding: 0.5em;
         font-weight: bold;
         border-bottom: 1px solid #fff;
-        background-color: #2e2e2e;
+        background-color: #6C0BA9;
       }
 
       .left-container > .modal-header > .header-avatar-container {
@@ -351,7 +351,8 @@
 
       /* For .chat-user active */
       .left-container > .modal-body > .chatting-user {
-        background-color: #792fa3;
+        background-color: darkgrey;
+        color: #010101;
       }
 
       .left-container > .modal-body > .chat-user:not(.chatting-user):hover {
@@ -359,7 +360,7 @@
       }
 
       .left-container > .modal-body > .chat-user > .body-avatar-container {
-        flex-basis: 20%;
+        flex-basis: 30%;
         display: flex;
         justify-content: center;
       }
@@ -373,7 +374,8 @@
         height: 55px;
         border-radius: 50%;
         object-fit: cover;
-        border: 1px solid white;
+        border: 1px solid 010101;
+        background-color: #010101;
       }
 
       .left-container > .modal-body > .chat-user > .empty-container {
@@ -424,21 +426,21 @@
         min-height: 70px;
         flex-basis: 10%;
         font-weight: bold;
-        background-color: #2e2e2e;
+        background-color: #6C0BA9;
         border-bottom: 1px solid #fff;
       }
 
       .right-container .right-modal-header .header-avatar-container {
         display: flex;
         flex: 0 0 50px;
-        flex-basis: 5%;
+        flex-basis: 10%;
         justify-content: center;
         align-items: center;
       }
 
       .right-container .right-modal-header > .header-name-container {
         display: flex;
-        flex-basis: 95%;
+        flex-basis: 90%;
         align-items: center;
         padding-left: 0.8em;
       }
@@ -669,7 +671,7 @@
 
       .right-modal-body li div {
         display: inline-block;
-        max-width: 80%;
+        /* max-width: 80%; */
         padding: 0.3em 0.5em;
         border-radius: 3px;
         word-break: break-all;
@@ -722,12 +724,13 @@
 
       .notification > .chat-notification {
         padding: 0.8em 1.2em;
-        background-color: black;
+        background-color: #6C0BA9;
         border: 1px solid grey;
         border-radius: 5px;
         display: flex;
         align-items: center;
         margin-top: 0.4em;
+        /* color: #010101; */
       }
 
       .chat-notification:hover {
@@ -760,7 +763,7 @@
         display: none;
       }
 
-      .modal-content {
+      .modal-content1 {
         width: 500px;
         height: 300px;
         background-color: rgb(50,50,50);
@@ -770,6 +773,10 @@
         */
         border: 1.5px solid rgb(191, 64, 191);
         flex-direction: column;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
       }
 
       h2.choose-game-header {
@@ -906,8 +913,8 @@
       <div class="button-section">
         <div class="private-chat">
           <!-- Trigger/Open The Modal -->
-          <button class="private-chat-btn" data-toggle="#myMoprivateGameBtndal">
-            Private chat
+          <button class="private-chat-btn" data-toggle="#myModal">
+            Private Chat
           </button>
         </div>
         <div class="create-room">
@@ -926,7 +933,7 @@
 
     <!-- selection modal -->
     <div class="selection-modal" id="selection-modal-button">
-      <div class="modal-content">
+      <div class="modal-content1">
           <div class="selection-header">
             <h2 class="choose-game-header">&#9876; Choose a game to play! &#9876;</h2>
             <!-- <i class="fas fa-times close-modal" data-dismiss="#myModal"></i> -->
@@ -958,11 +965,11 @@
       </div>
     </div>
 
-    <!-- <span class="close" data-dismiss="#myModal">&times;</span> -->
-    <!-- The Modal -->
+    <!-- ChatRoom Modal -->
     <div id="myModal" class="modal">
       <!-- Modal content -->
       <div class="modal-content">
+
         <div class="left-container">
           <div class="modal-header">
             <div class="header-avatar-container">
@@ -972,13 +979,15 @@
           </div>
           <div class="modal-body" id="chatList"></div>
         </div>
+
+
         <div class="right-container">
           <i class="fas fa-times close-modal" data-dismiss="#myModal"></i>
           <div class="right-modal-header">
-            <div class="header-avatar-container">
+            <!-- <div class="header-avatar-container">
               <img src="avatar/empty.png" />
-            </div>
-            <div class="header-name-container">Select a user to chat...</div>
+            </div> -->
+            <div class="header-name-container">Chat Room</div>
           </div>
           <div class="right-modal-body" style="display: none">
             <!-- messagesss -->
@@ -991,6 +1000,8 @@
                   <div class="emoji-invoker" slot="emoji-invoker" slot-scope="{ events: { click: clickEvent } }" @click.stop="clickEvent" >
                     <i class="far fa-laugh"></i>
                   </div>
+
+                  <!-- emoji box in chat -->
                   <div slot="emoji-picker" slot-scope="{ emojis, insert, display }" >
                     <div class="emoji-picker">
                       <div class="emoji-picker-search">
@@ -1016,6 +1027,7 @@
             </div>
           </div>
         </div>
+
       </div>
     </div>
 
@@ -1032,15 +1044,22 @@
 
     <script>
 
-      //store selected game into session
-      var drawandguess  = $(".game1").attr('src');
-      var tictactoe  = $(".game2").attr('src');
-      var typing  = $(".game3").attr('src');
+       //go to chat
+      //  $('.private-chat-btn').on('click', e => {
+      //       e.preventDefault();
+      //       window.location = 'chat.html';
+      //   });
+      
 
-      $(".button").click(function () {
-        var images = $(".img1 img").attr('src');
-        alert(images);
-      });
+      // //store selected game into session
+      // var drawandguess  = $(".game1").attr('src');
+      // var tictactoe  = $(".game2").attr('src');
+      // var typing  = $(".game3").attr('src');
+
+      // $(".button").click(function () {
+      //   var images = $(".img1 img").attr('src');
+      //   alert(images);
+      // });
 
 
 
@@ -1152,6 +1171,8 @@
 
       // Send YouTube video
       function getYoutubeId(message) {
+
+        
         try {
           let url = new URL(message);
           if (url.hostname == "www.youtube.com" && url.pathname == "/watch") {
@@ -1186,20 +1207,28 @@
         // </div>
       }
 
-      function appendYoutubeChat(id, who) {
+      function appendYoutubeChat(caller, id, who, time) {
+
+        let today = new Date();
+        let minutes = today.getMinutes();
+        minutes = minutes <= 9 ? '0' + minutes : minutes;
+        time = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + " [" + (today.getHours()%12) + ":" + minutes + "]";
+
         isBottom();
         $(".right-modal-body").append(`
                 <li class="${who}">
                     <div>
+                        <b>${caller}</b> sent a video<br>
                         <iframe width="400" height="300" src="https://www.youtube.com/embed/${id}" frameborder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <small style="color: grey; padding: 10px;">${time} <i class="fas fa-check-double"></i></small>
                     </div>
                 </li>    
             `);
         scrollToBottom();
       }
 
-      function appendMessageChat(message, who) {
+      function appendMessageChat(caller, message, who, time) {
         message = message
           .split(":)")
           .join("😊")
@@ -1224,11 +1253,16 @@
           `<a href="$&" ${target} style="color: white;">$&</a>`
         );
 
+        let today = new Date();
+        let minutes = today.getMinutes();
+        minutes = minutes <= 9 ? '0' + minutes : minutes;
+        time = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + " [" + (today.getHours()%12) + ":" + minutes + "]";
+
         isBottom();
         $(".right-modal-body").append(`
                 <li class="${who}">
                     <div>
-                        ${message}
+                      <b>${caller}:</b> ${message} <small style="color: grey;">${time} <i class="fas fa-check-double"></i></small>
                     </div>
 
                 </li>
@@ -1236,12 +1270,21 @@
         scrollToBottom();
       }
 
-      function appendImageChat(url, who) {
+      function appendImageChat(caller, url, who, time) {
+
+        let today = new Date();
+        let minutes = today.getMinutes();
+        minutes = minutes <= 9 ? '0' + minutes : minutes;
+        time = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + " [" + (today.getHours()%12) + ":" + minutes + "]";
+
+
         isBottom();
         $(".right-modal-body").append(`
                 <li class="${who}">
                     <div>
-                        <img src="${url}" class="image" onload="scrollToBottom()"> 
+                        <b>${caller}</b> sent an image<br>
+                        <img src="${url}" class="image" onload="scrollToBottom()">
+                        <small style="color: grey;">${time} <i class="fas fa-check-double"></i></small>
                     </div>
                 </li>
             `);
@@ -1263,7 +1306,7 @@
       function playChatSound() {
         // play audio
         // since chrome 66 does not allow play audio without interaction, ignores it then
-        var audio = new Audio("audio/notification.wav");
+        var audio = new Audio("audio/message.wav");
         audio.play();
       }
 
@@ -1276,7 +1319,7 @@
                 )}">
                     <span class="chat-caller">${sanitize(
                       caller
-                    )} </span> send a  <span class="chat-keyword"> ${keyword} </span> to you <i class="fas fa-times notification-close"></i>
+                    )} </span> sent a  <span class="chat-keyword"> ${keyword} </span> to you <i class="fas fa-times notification-close"></i>
                 </div>
             `)
           .appendTo("#notification")
@@ -1372,9 +1415,8 @@
 
       // Navigate to game room when creating game room
       con.on("NavigateGroup", (guid) => {
-        // window.location = "drawandguess.html?id=" + guid;
-        var game = sessionStorage.getItem('game');
-        window.location = game + ".html?id=" + guid;
+         window.location = "drawandguess.html?id=" + guid;
+        
       });
 
       // Display Error message if something went wrong
@@ -1510,7 +1552,7 @@
           return;
         }
 
-        appendMessageChat(message, who);
+        appendMessageChat(caller, message, who);
       });
 
       // Receive image
@@ -1520,7 +1562,7 @@
           return;
         }
 
-        appendImageChat(url, who);
+        appendImageChat(caller, url, who);
       });
 
       // Receive YouTube video
@@ -1530,7 +1572,7 @@
           return;
         }
 
-        appendYoutubeChat(id, who);
+        appendYoutubeChat(caller, id, who);
       });
 
       // To store the user chat message from others
@@ -1616,21 +1658,22 @@
       // Event Listener ==================================================================
       // Create Draw and Guess Game Room
       $(".game1").on("click", (e) => {
-        var game = drawandguess;
-        sessionStorage.setItem('game', drawandguess);
-        con.invoke("CreateGroup", true, game);
+        // var game = drawandguess;
+        // sessionStorage.setItem('game', drawandguess);
+        // con.invoke("CreateGroup", true, game);
+        con.invoke("CreateGroup", true);
       });
 
       $(".game2").on("click", (e) => {
-        var game = tictactoe;
-        sessionStorage.setItem('game', tictactoe);
-        con.invoke("CreateGroup", true, game);
+        // var game = tictactoe;
+        // sessionStorage.setItem('game', tictactoe);
+        con.invoke("CreateGroup", true);
       });
 
       $(".game3").on("click", (e) => {
-        var game = typing;
-        sessionStorage.setItem('game', typing);
-        con.invoke("CreateGroup", true, game);
+        // var game = typing;
+        // sessionStorage.setItem('game', typing);
+        con.invoke("CreateGroup", true);
       });
 
       $("#gameRoom").on("click", "[data-groupid]", (e) => {
@@ -1693,7 +1736,7 @@
             appendYoutubeChat(id, who);
           } else {
             // Append message
-            appendMessageChat(message, who);
+            appendMessageChat( message, who);
           }
         });
 
