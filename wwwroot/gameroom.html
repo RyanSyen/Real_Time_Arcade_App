@@ -334,6 +334,7 @@
         height: 55px;
         border-radius: 50%;
         object-fit: cover;
+        background-color: #010101;
       }
 
       .left-container > .modal-body {
@@ -449,6 +450,7 @@
         width: 55px;
         height: 55px;
         border-radius: 50%;
+        background-color: #010101;
       }
 
       .right-container .right-modal-body {
@@ -489,7 +491,7 @@
         z-index: 2;
       }
 
-      .right-container .fa-paperclip {
+      .right-container .fa-image {
         position: absolute;
         font-size: 1.3em;
         top: 50%;
@@ -1018,11 +1020,12 @@
                     </div>
                   </div>
                 </emoji-picker>
-                <i class="fas fa-paperclip"></i>
-                <div class="upload" id="popup">
+                <i class="far fa-image" id="localImage"></i>
+                  <input type="file" id="file" accept="image/*" hidden />
+                <!-- <div class="upload" id="popup">
                   <i class="far fa-image" id="localImage"></i>
                   <input type="file" id="file" accept="image/*" hidden />
-                </div>
+                </div> -->
               </form>
             </div>
           </div>
@@ -1247,6 +1250,29 @@
           target = "";
         }
 
+        //bad words
+        let badwords = /fuck|shit|piss|dick|ass|asshole|bitch|bastard|damn|bollocks|bugger|rubbish/gi;
+
+        //shortcut keys
+        message = message
+                .replaceAll('`smile`', '😊')
+                .replaceAll('`cry`', '😥')
+                .replaceAll('`heart`', '❤️')
+                .replaceAll('`thank`', '🙏')
+                .replaceAll('`strong`', '💪')
+                .replaceAll('`lovely`', '🥰')
+                .replaceAll('`fire`', '🔥')
+                .replaceAll('`laughing`', '🤣')
+                .replaceAll('`pleading`', '🥺')
+                .replaceAll('`sparkle`', '✨')
+                .replaceAll('`joy`', '😂')
+                .replaceAll('`crying`', '😭')
+                .replace(/\*(.*?)\*/g, "<b>$1</b>")
+                .replace(/_(.*?)_/g, "<u>$1</u>")
+                .replace(/~(.*?)~/g, "<i>$1</i>")
+                .replace(/-(.*?)-/g, "<del>$1</del>")
+                .replace(badwords, "****");
+
         // Text-to-hyperlink
         message = message.replace(
           /(?<=^|\s)(https?:\/\/\S+)(?=$|\s)/gi,
@@ -1432,15 +1458,15 @@
         // if the empty room exist, hide it.
         if ($("#emptyRoomMessage").length) {
           $("#emptyRoomMessage").css("display", "none");
-          $("#gameRoom").append(`
-            <div class"room-header" style="justify-content: center; ">
-              <span style="font-size: xx-large; font-weight: 900;">
-                <!-- <i class="fas fa-gamepad">-->
-                The Game Room
-              </span>
+          // $("#gameRoom").append(`
+          //   <div class"room-header" style="justify-content: center; ">
+          //     <span style="font-size: xx-large; font-weight: 900;">
+          //       <!-- <i class="fas fa-gamepad">-->
+          //       The Game Room
+          //     </span>
 
-            </div>
-                     `);
+          //   </div>
+          //            `);
         }
 
         // if the group exist, then just append the number
