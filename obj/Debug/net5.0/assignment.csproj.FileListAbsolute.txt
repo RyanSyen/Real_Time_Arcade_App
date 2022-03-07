@@ -1,0 +1,6 @@
+D:\School\TARUC\Year 2\Sem 3\BAIT3093 Emerging Web Technologies\version2\ryan1\assignment\obj\Debug\net5.0\assignment.csproj.AssemblyReference.cache
+D:\School\TARUC\Year 2\Sem 3\BAIT3093 Emerging Web Technologies\version2\ryan1\assignment\obj\Debug\net5.0\assignment.GeneratedMSBuildEditorConfig.editorconfig
+D:\School\TARUC\Year 2\Sem 3\BAIT3093 Emerging Web Technologies\version2\ryan1\assignment\obj\Debug\net5.0\assignment.AssemblyInfoInputs.cache
+D:\School\TARUC\Year 2\Sem 3\BAIT3093 Emerging Web Technologies\version2\ryan1\assignment\obj\Debug\net5.0\assignment.AssemblyInfo.cs
+D:\School\TARUC\Year 2\Sem 3\BAIT3093 Emerging Web Technologies\version2\ryan1\assignment\obj\Debug\net5.0\assignment.csproj.CoreCompileInputs.cache
+D:\School\TARUC\Year 2\Sem 3\BAIT3093 Emerging Web Technologies\version2\ryan1\assignment\obj\Debug\net5.0\assignment.MvcApplicationPartsAssemblyInfo.cache

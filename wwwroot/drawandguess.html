@@ -1,0 +1,3571 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draw and Guess</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+        integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="shortcut icon" href="#" />
+    <link href="images/favicon.png" rel="shortcut icon">
+
+    <style>
+        .fa-check-circle,
+        .fa-times-circle,
+        .fa-exclamation-triangle,
+        .fa-bullhorn,
+        .fa-user-plus,
+        .fa-user-slash,
+        .fa-dice,
+        .fa-sync-alt,
+        .fa-home,
+        .fa-clock,
+        .fa-info-circle {
+            padding-right: 0.3em;
+        }
+
+        .container {
+            margin: auto;
+            display: grid;
+            justify-content: center;
+            grid-template-areas:
+                /* 'topleft topleft tools tools tools tools' */
+                'tools tools tools tools tools tools'
+                'user user canvas canvas canvas chat'
+                'user user status status status chat';
+                /* 'gameState gameState chat chat chat chat'; */
+            grid-template-columns: 100px 100px 170px 170px 170px 250px;
+            grid-template-rows: auto calc(90px * 4) 130px 250px;
+            grid-gap: 0.6em;
+            margin-top: 1em;
+        }
+
+        .color-green {
+            color: #19c243;
+        }
+
+        .color-lightgrey {
+            color: #c9c9c9;
+        }
+
+        .color-orange {
+            color: #e66e19;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .container > div {
+            /* border: 1px solid rgba(255, 255, 255, 0.3); */
+            border: 1px solid #CF9FFF;
+        }
+
+        /* .topleft    { grid-area: topleft;   } */
+        .tools      { grid-area: tools;     }
+        .user       { grid-area: user;      }
+        .status     { grid-area: status;    }
+        .canvas     { grid-area: canvas;    }
+        .gameState  { grid-area: gameState; }
+        .chat       { grid-area: chat;      }
+
+
+        .user {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .user > .userlist {
+            flex-basis: 20%;
+            border-top: 1px solid #CF9FFF ;
+            border-bottom: 1px solid #CF9FFF ;
+            display: flex;
+            width: 100%;
+            height: 20%;
+        }
+
+        .user > .user-select {
+            cursor: pointer;
+        }
+
+        .user > .user-select:hover {
+            background-color: #262626;
+        }
+
+        /* .user > .userlist[data-user] {
+            transition: top 1s;
+        } */
+
+        .user > .userlist > .photo-container {
+            flex-basis: 25%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding-left: 5px;
+        }
+
+        .user > .userlist > .photo-container > .photo {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+            /* padding-left: 5px; */
+        }
+
+        .user > .userlist > .photo-container > .photo-isdrawing {
+            border: 3px solid green;
+        }
+
+        .user > .userlist > .photo-container > .fa-crown-container {
+            position: absolute;
+            left: 10px;
+            top: 5px;
+            background-color:grey;
+            color: gold;
+            padding: 2px;
+            border-radius: 50%;;
+        }
+
+        .user > .userlist > .empty-container {
+            flex-basis: 75%;
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.5);
+            padding-left: 5px;
+        }
+
+        .user > .userlist > .user-detail-container {
+            flex-basis: 60%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user > .userlist > .user-detail-container > div {
+            flex-basis: 50%;
+        }
+
+        .user > .userlist > .user-detail-container > .username {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .user > .userlist > .user-detail-container > .score {
+            font-weight: bold;
+            color:#c75fde;
+            font-size: 1.1rem;
+        }
+
+        .user > .userlist > .action-container {
+            flex-basis: 15%;
+            /* border-left: 1.5px solid #CF9FFF ; */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user > .userlist > .action-container > div {
+            flex-basis: 100%;
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .private-chat-btn {
+            background-color:#045e20 ;
+        }
+
+        .private-chat-btn:hover {
+            background-color: #046b24;
+        }
+
+        .status {
+            display: flex;
+            flex-direction: column;
+            padding: 0.4em;
+            justify-content: space-between;
+        }
+
+        .status > .status-container {
+            display:flex;
+            flex-basis: 85%;
+            flex-direction: column;
+            justify-content: center;
+            align-content: center;
+        }
+
+        .status > .status-container > div {
+            padding: 0.3em 2em;
+            text-align: center;
+            font-size: 1.2rem;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .status > .status-container > .first-status > .button,
+        .status > .status-container > .second-status > .button{
+            padding: 0.5em 1.5em;
+            cursor: pointer;
+            border-radius: 20px;
+            border: none;
+            background-color: #2bb58b;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .status > .status-container > .first-status > .button:hover,
+        .status > .status-container > .second-status > .button:hover{
+            background-color: #2ebf93;
+        }
+
+        .status > .status-container > .second-status > .winner-list {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .status > .status-container > .second-status > .winner-list > div {
+            flex-basis: 33%;
+            color: orange;
+        }
+
+        .text-guess {
+            letter-spacing: 3px;
+            color: orange;
+        }
+
+        .name-status {
+            color: orange;
+        }
+
+        .status > .progress-bar {
+            display: flex;
+            flex-basis: 15%;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .status > .progress-bar > .bar {
+            border: 1px solid #e6e6e6;
+            border-radius: 5px;
+            box-shadow: 0px 0px 1px 1px #888888;
+            background-color: #d6d6d6;
+        }
+
+        .status > .progress-bar > .bar > .progress {
+            background-color: #d4713b;
+            padding: 0.3em 0;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+
+        /*     CHAT - v1     */
+        .chat {
+            display: flex;
+        }
+
+        .chat > div {
+            display: flex;
+            flex-direction: column;
+           
+        }
+
+        .chat > div > div:first-child {
+            flex-basis: 87%;
+            padding: 0.3em;
+            overflow-y: auto; 
+            overflow-wrap: break-word; 
+            position: relative;
+        }
+
+        .chat > div > div:first-child > div {
+            padding: 0.2em 0;
+        }
+
+        .chat > div > div:first-child > div > .caller {
+            font-weight: bold;
+            color: #c676e3;
+        }
+
+        .chat > div > div:first-child > div > .others {
+            font-weight: bold;
+            color: #2abac9;
+        }
+
+        .chat > div > form:last-child {
+            flex-basis: 13%;
+            border-radius: 5px;
+            position: relative;
+        }
+
+      
+        .simple-chat{
+            height: 100%;
+            width: 100%;
+        }
+
+        .chat > div > form:last-child > input[type=text] {
+            height: 60%;
+            width: 85%;
+            padding: 0.5em;
+            background-color: #2c3347;
+            border-radius: 5px;
+            border: 1px solid #8c8c8c;
+            color: white;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .chat > div > form:last-child > button {
+            position: absolute;
+            height: 60%;
+            width: 15%;
+            right: 0;
+            bottom: 0;
+            background-color: #2c3347;
+            border: 1px solid grey;;
+            border-radius: 5px;
+            color: #8c8c8c;
+            cursor: pointer;
+        }
+
+        .chat > div > form:last-child > input[type=text]:focus {
+            outline: none;
+            border: 1px solid #d1d1d1;
+        }
+
+        .chat > div > form:last-child > input[type=text]:disabled {
+            background-color: #1c212e;
+            border: 1px solid #595959;
+        }
+
+        .chat > div > form:last-child > button:disabled {
+            background-color: #1c212e;
+            cursor: auto;
+            border: 1px solid #595959;
+        }
+
+        .gameState {
+            padding: 0.7em 0.5em;
+            font-size: 1rem;
+        }
+
+        .gameState > .gameState-parent {
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        .gameState > .gameState-parent > div {
+            padding: 0.2em 0;
+        }
+
+        .gameState > .gameState-parent > .gameState-container {
+            padding: 0.7em;
+            margin-top: 0.6em;
+            text-align: center;
+            color: #c7c7c7;
+            border-bottom: 1px solid grey;
+        }
+
+        .gameState > .gameState-parent > .gameState-container > .gameState-title {
+            padding: 0.1em 0;
+            color: #b944e3; 
+            font-weight: bold; 
+        }
+
+        .gameState > .gameState-parent > .gameState-container > .gameState-desc {
+            padding-top: 0.3em;
+        }
+
+        .gameState > .gameState-parent> .gameState-container > .gameState-desc > div {
+            padding: 0.1em 0;
+        }
+
+        .tools {
+            display: flex;
+            background-color: #292929;
+        }
+
+        .tools > .toolset {
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+            grid-template-rows: auto auto;
+            flex-basis: 25%;
+            border-right: 1px solid grey;
+        }
+
+        .tools > .toolset > label {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tools > .toolset > input[type="radio"]:not([disabled]) + label:hover {
+            color: #6cb339;
+            cursor: pointer;
+        }
+
+        .tools > .toolset > input[type="radio"] {
+            display: none;
+        }
+
+        .tools > .toolset > input[type="radio"]:checked:enabled + label {
+            color: orange;
+        }
+
+        .tools > .canvas-action {
+            display: flex;
+            flex-direction: column;
+            flex-basis: 14%;
+            border-right: 1px solid grey;
+        }
+
+        .tools > .canvas-action > * {
+            flex-basis: 50%;
+            display: flex;
+        }
+
+        .tools > .canvas-action > *:first-child {
+            align-items: center;
+            justify-content: center;
+            border: none;
+            outline: none;
+            border-bottom: 1px solid grey;
+            background-color: transparent;
+            color: white;
+        }
+
+        .tools > .canvas-action > *:first-child:hover:enabled,
+        .tools > .canvas-action > *:last-child > *:hover:enabled
+        {
+            color: #6cb339;
+            cursor: pointer;
+        }
+
+        .tools > .canvas-action > *:first-child:active:enabled,
+        .tools > .canvas-action > *:last-child > *:active:enabled
+        {
+            color: orange;
+        }
+
+        .tools > .canvas-action > *:last-child > * {
+            flex-basis: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: white;
+        }
+
+        .tools > .canvas-action > *:last-child > *:first-child {
+            border-right: 1px solid grey;
+        }
+
+        .tools > .color-select {
+            flex-basis: 20%;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid grey;
+        }
+
+        .tools > .color-select > div {
+            flex-basis: 50%;
+            display: flex;
+            padding: 0 0.6em;
+        }
+
+        .tools > .color-select > div:first-child {
+            border-bottom: 1px solid grey;
+        }
+
+        .tools > .color-select > div > div {
+            display: flex;
+            align-items: center;
+        }
+
+        .tools > .color-select > div > div > input[type="color"] { 
+            width: 90%;
+        }
+
+        .tools > .color-select > div > div:first-child {
+            flex-basis: 40%;
+        }
+
+        .tools > .color-select > div > div:last-child {
+            flex-basis: 60%;
+            justify-content: center;
+        }
+
+
+        .tools > .input-range {
+            flex-basis: 41%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tools > .input-range > div {
+            flex-basis: 50%;
+            display: flex;
+        }
+
+        .tools > .input-range > div:first-child {
+            border-bottom: 1px solid grey;
+        }
+
+        .tools > .input-range > div > div {
+            display: flex;
+            align-items: center;
+        }
+
+        .tools > .input-range > div > div:first-child {
+            flex-basis: 25%;
+            padding-left: 0.5em;
+        }
+
+        .tools > .input-range > div > div:last-child {
+            flex-basis: 75%;
+            justify-content: center;
+        }
+
+        .tools > .input-range > div > div:last-child > input[type="range"]{
+            width: 80%;
+        }
+
+        .canvas {
+            position: relative;
+            overflow: hidden;
+            touch-action: none;
+            user-select: none;
+            cursor: crosshair;
+        }
+
+        #pencilCursor,
+        #eraserCursor {
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            border: 1px solid white;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            display: none;
+            background: transparent;
+        }
+
+        #pencilCursor {
+            border-radius: 50%;
+        }
+
+        #svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* border: 1px solid blue; */
+            background-color: transparent;
+            display: none;
+            pointer-events: none;
+        }
+
+        /* Modal */
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animatetop;
+            animation-duration: 0.4s
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #1f1f1f;
+            margin: auto;
+            width: 80%;
+            height: 80%;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+        }
+
+        .modal-content > div {
+            border: 1px solid white;
+        }
+
+        .modal-content > .left-container {
+            flex-basis: 25%;
+            height: 100%;
+        }
+
+        .modal-content > .right-container {
+            flex-basis: 75%;
+        }
+
+        @keyframes animatetop {
+            from {
+                top: -300px;
+                opacity: 0
+            }
+
+            to {
+                top: 0;
+                opacity: 1
+            }
+        }
+
+        .left-container > .modal-header {
+            display: flex;
+            width: 100%;
+            height: 10%;
+            min-height: 70px;
+            padding: 0.5em;
+            font-weight: bold;
+            border-bottom: 1px solid #fff;
+            background-color: #2e2e2e;
+        }
+
+        .left-container > .modal-header > .header-avatar-container {
+            display: flex;
+            flex-basis: 35%;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .left-container > .modal-header > .header-name-container {
+            display: flex;
+            flex-basis: 65%;
+            align-items: center;
+            word-wrap: break-word;
+        }
+
+        .left-container > .modal-header > .header-avatar-container > img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .left-container > .modal-body {
+            overflow-y: auto;
+            height: 90%;
+        }
+
+        .left-container > .modal-body > .chat-user {
+            display: flex;
+            width: 100%;
+            padding: 0.5em;
+            cursor: pointer;
+            border-bottom: 1px solid white;
+        }
+
+        /* For .chat-user active */
+        .left-container > .modal-body > .chatting-user {
+            background-color: #792fa3;
+        }
+
+        .left-container > .modal-body > .chat-user:not(.chatting-user):hover {
+            background-color: #303030;
+        }
+
+        .left-container > .modal-body > .chat-user > .body-avatar-container {
+            flex-basis: 20%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .left-container > .modal-body > .chat-user > .body-avatar-container > .photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid white;
+            
+        }
+
+        .left-container > .modal-body > .chat-user > .empty-container {
+            flex-basis: 70%;
+            display: flex;
+            align-items: center;
+            padding-left: 1em;
+        }
+
+        .left-container > .modal-body > .chat-user > .notify {
+            flex-basis: 10%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .left-container > .modal-body > .chat-user > .notify > .notify-count {
+            display: flex;
+            width: 25px;
+            height: 25px;
+            background-color: red;
+            padding: 0.5em;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+        }
+        /* left-container end */
+        
+        /* right-container */
+        .right-container {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .right-container > .close-modal {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            cursor: pointer;
+        }
+
+        .right-container .right-modal-header {
+            display: flex;
+            padding: 0.5em;
+            height: 10%;
+            min-height: 70px;
+            flex-basis: 10%;
+            font-weight: bold;
+            background-color: #2e2e2e;
+            border-bottom: 1px solid #fff;
+        }
+
+        .right-container .right-modal-header .header-avatar-container {
+            display: flex;
+            flex: 0 0 50px;
+            flex-basis: 5%;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .right-container .right-modal-header > .header-name-container {
+            display: flex;
+            flex-basis: 95%;
+            align-items: center;
+            padding-left: 0.8em;
+        }
+
+        .right-container .header-avatar-container > img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+        }
+
+        .right-container .right-modal-body {
+            border-bottom: 1px solid #fff;
+            flex: 1 1 82%;
+            padding: 1em;
+            overflow: auto;
+        }
+
+        .right-container > .right-modal-footer {
+            flex: 0 0 8%;
+            min-height: 50px;
+            padding: 0.3em 0.5em;
+            background-color: #2e2e2e;
+            position: relative;
+        }
+
+        .right-container .right-modal-footer #message {
+            width: 90%;
+            padding: 0.6em 1em;
+            font-size: 14px;
+            outline: none;
+            border-radius: 25px;
+            position: absolute;
+            top: 50%;
+            left: 46%;
+            transform: translate(-50%, -50%);
+        }
+
+        .right-container .fa-laugh {
+            position: absolute;
+            font-size: 1.5em;
+            top: 50%;
+            left: 93%;
+            transform: translate(-50%, -50%);
+            color: #bfbfbf;
+            cursor: pointer;
+            z-index: 2;
+        } 
+
+        .right-container .fa-paperclip {
+            position: absolute;
+            font-size: 1.3em;
+            top: 50%;
+            left: 97%;
+            transform: translate(-50%, -50%);
+            color:#bfbfbf;
+            cursor: pointer;
+        }
+
+        .image {
+            max-width: 200px;
+            max-height: 200px;
+            cursor: pointer;
+        }
+
+        .image:fullscreen {
+            object-fit: scale-down;
+        }
+
+        /* Pop-up window */
+        #popup {
+            position: absolute;
+            /* display: flex; */
+            top: -3em;
+            right: .5em;
+            background-color: #595959;
+            padding: 8px;
+            border-radius: 5px;
+            z-index: 1;
+            display: none;
+            animation: fadeIn .2s;
+        }
+
+        #popup > i {
+            font-size: 1.3em;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        #popup > i:hover {
+            opacity: 0.8;
+        }
+
+        #popup i::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 80%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+
+        .drag-and-drop {
+            outline: 3px dashed red;
+            outline-offset: -3px;
+        }
+
+        /* Emoji-picker */
+        .emoji-picker {
+            position: absolute;
+            top: -330px;
+            right: 5%;
+            z-index: 2;
+            font-family: Montserrat;
+            border: 1px solid #010101;
+            width: 15rem;
+            height: 20rem;
+            overflow: auto;
+            padding: 1rem;
+            box-sizing: border-box;
+            border-radius: 0.5rem;
+            background: #1b262c;
+        }
+
+        .emoji-picker-search {
+            display: flex;
+        }
+
+        .emoji-picker-search > input {
+            flex: 1;
+            border-radius: 10rem;
+            border: 1px solid #ccc;
+            padding: 0.5rem 1rem;
+            outline: none;
+        } 
+
+        .emoji-picker h5 {
+            margin-bottom: 0;
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            cursor: default;
+        }
+
+        .emoji-picker .emojis {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .emoji-picker .emojis:after {
+            content: "";
+            flex: auto;
+        }
+
+        .emoji-picker .emojis span {
+            padding: 0.2rem;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .emoji-picker .emojis span:hover {
+            background: #ececec;
+            cursor: pointer;
+        }
+        /* right-container end */
+
+        /* popop window animation */
+        @keyframes fadeIn {
+            0% { opacity: 0; } 
+            100% { opacity: 1; }
+        }    
+
+
+
+        @media (max-width: 1100px) {
+            .modal-content {
+                width: 90%;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .modal-content {
+                width: 95%;
+            }
+
+            .left-container {
+                flex-basis: 10%;
+            }
+
+            .left-container > .modal-body > .chat-user > .body-avatar-container > .photo  {
+                width: 20px;
+                height: 20px;
+            }
+
+            .left-container .empty-container {
+                font-size: 0.5rem;
+            }
+
+            .left-container > .modal-body > .chat-user > .notify > .notify-count  {
+                width: 8px;
+                height: 8px;
+                font-size: 0.5rem;
+            }
+        }
+
+        /* Private chat */
+        #form {
+            display: flex;
+        }
+
+        .right-modal-body{
+            list-style: none;
+            /* margin: 0;
+            padding: 0; */
+        }
+
+        .right-modal-body li {
+            margin-bottom: 10px;
+        }
+
+        .right-modal-body li div {
+            display: inline-block;
+            max-width: 80%;
+            padding: 0.3em 0.5em;
+            border-radius: 3px;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+
+        .right-modal-body li.caller {
+            text-align: left;
+        }
+
+        .right-modal-body li.caller div {
+            background-color: #1e5f74;
+        }
+
+        .right-modal-body li.others {
+            text-align: right;
+        }
+
+        .right-modal-body li.others div {
+            background-color: #0f4c75;
+        }
+
+        .right-modal-body li.spam {
+            text-align: center;
+        }
+
+        .right-modal-body li.spam div {
+            background-color: #cc4d2d;
+        }
+
+        .notification {
+            position: fixed; 
+            left: 0.5em; 
+            bottom: 0.5em; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: flex-start; 
+            z-index: 2; 
+            cursor:pointer;
+            pointer-events: none;
+        }
+
+        .notification span {
+            white-space: pre;
+        }
+
+        .notification > * {
+            pointer-events: auto;
+        }
+
+        .notification > .chat-notification {
+            padding: 0.8em 1.2em; 
+            background-color: black; 
+            border: 1px solid grey; 
+            border-radius: 5px; 
+            display: flex; 
+            align-items: center; 
+            margin-top: 0.4em;
+        }
+
+        .chat-notification:hover {
+            background-color: #262626;
+        }
+
+        .notification > .chat-notification > .chat-caller {
+            color: orange;
+        }
+
+        .notification > .chat-notification > .chat-keyword {
+            color: lightgreen;
+        }
+
+        .notification-close {
+            margin-left: 0.8em;
+        }
+
+        #copyPopup {
+            position: fixed; 
+            left: 15px; 
+            top: 15px; 
+            padding: 0.5em 1em; 
+            background-color: black; 
+            border-radius: 10px; 
+            border: 1px solid grey;
+            display: none;
+        }
+
+        .leave{
+            position:absolute;
+            top:0;
+            left:0;
+            height: 40px;
+            width: 40px;
+            margin: 20px;
+            cursor: pointer;
+        }
+
+
+    </style>
+    <script src="js/login.js"></script>
+    <script src="js/checkgroup.js"></script>
+</head>
+
+<body>
+    <div class="container" style="display: none;" id="container">
+        <div class="tools">
+            <div class="toolset">
+                <input id="pencil" type="radio" name="toolset" value="pencil">
+                <label for="pencil" title="Pencil">
+                    <i class="fas fa-pencil-alt"></i>
+                </label>
+                <input id="eraser" type="radio" name="toolset" value="eraser">
+                <label for="eraser" title="Eraser">
+                    <i class="fas fa-eraser"></i>
+                </label>
+                <input id="line" type="radio" name="toolset" value="line">
+                <label for="line" title="Line">
+                    <i class="fas fa-slash"></i>
+                </label>
+                <input id="lineDash" type="radio" name="toolset" value="line-dash">
+                <label for="lineDash" title="Line Dash">
+                    <i class="fas fa-arrows-alt-h"></i>
+                </label>
+                <input id="fillSquare" type="radio" name="toolset" value="fill-square">
+                <label for="fillSquare" title="Fill Square">
+                    <i class="fas fa-square"></i>
+                </label>
+                <input id="strokeSquare" type="radio" name="toolset" value="stroke-square">
+                <label for="strokeSquare" title="Stroke Square">
+                    <i class="far fa-square"></i>
+                </label>
+                <input id="fillCircle" type="radio" name="toolset" value="fill-circle">
+                <label for="fillCircle" title="Fill Circle">
+                    <i class="fas fa-circle"></i>
+                </label>
+                <input id="strokeCircle" type="radio" name="toolset" value="stroke-circle">
+                <label for="strokeCircle" title="Stroke Circle">
+                    <i class="far fa-circle"></i>
+                </label>
+                
+            </div>
+            <div class="canvas-action">
+                <button id="clearBtn" title="Clear Board" tabindex="-1">
+                    <i class="fas fa-chalkboard"></i>
+                </button>
+                <div>
+                    <button id="undoBtn" title="Undo" tabindex="-1">
+                        <i class="fas fa-undo-alt"></i>
+                    </button>
+                    <button id="redoBtn" title="Redo" tabindex="-1">
+                        <i class="fas fa-redo-alt"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="color-select">
+                <div title="Fill Colors">
+                    <div>
+                        Fill: 
+                    </div>
+                    <div>
+                        <input type="color" value="#4a86e8" id="fillColor" list>
+                    </div>
+                </div>
+                <div title="Stroke Colors">
+                    <div>
+                        Stroke: 
+                    </div>
+                    <div>
+                        <input type="color" value="#ff9900" id="strokeColor" list>
+                    </div>
+                </div>
+            </div>
+            <div class="input-range">
+                <div>
+                    <div>Size:</div>
+                    <div><input id="size" type="range" min="5" max="25" step="1" value="5"></div>
+                </div>
+                <div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        <div class="user"> </div>
+        <div class="status">
+            <div class="status-container" id="statusContainer"></div>
+
+            <div class="progress-bar">
+                <div class="bar">
+                    <div class="progress" id="bar"></div>
+                </div>    
+            </div>
+        </div>
+        <div class="canvas">
+            <canvas id="ctx" width="705" height="446">
+            </canvas>
+            <div id="pencilCursor"></div>
+            <div id="eraserCursor"></div>
+            <svg id="svg" width="100%" height="100%" fill="transparent"> </svg>
+        </div>
+        
+        <div class="chat">
+            <div class="simple-chat">
+                <div id="simpleChat">
+                    <div class="color-lightgrey" style="border-bottom: 1px solid grey;">ChatRoom</div>
+                </div>
+                
+                <form id="simpleChatForm" autocomplete="off">
+                    <input id="simpleChatText" type="text" placeholder="Chat" maxlength="50">
+                    <button id="simpleChatBtn"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="leave">
+        <img src="images/logout.png" alt="logout"class="leave-img">
+        <p class="textt" style="color:#CF9FFF; opacity: 0; position: relative; left: 50px; top: -55px;">Leave Room</p>
+    </div>
+    
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="left-container">
+                <div class="modal-header">
+                    <div class="header-avatar-container">
+                        <img src="avatar/row-1-col-1.png" id="header-avatar">
+                    </div>
+                    <div class="header-name-container" id="header-name"></div>
+                </div>
+                <div class="modal-body" id="chatList">
+                </div>
+            </div>
+            <div class="right-container">
+                <i class="fas fa-times close-modal" data-dismiss="#myModal"></i>
+                <div class="right-modal-header">
+                    <div class="header-avatar-container">
+                        <img src="avatar/empty.png">
+                    </div>
+                    <div class="header-name-container">Select a user to chat...</div>
+                </div>
+                <div class="right-modal-body" style="display: none;">
+                    <!-- messagesss -->
+                </div>
+                <div class="right-modal-footer" style="display: none;">
+                    <div id="emoji">
+                        <form id="form" autocomplete="off">
+                            <input type="text" id="message" placeholder="Enter message" name="message" v-model="input" v-on:keyup.13="resetInput" autofocus>
+                            <emoji-picker @emoji="insert" :search="search">
+                                <div class="emoji-invoker" slot="emoji-invoker" slot-scope="{ events: { click: clickEvent } }" @click.stop="clickEvent">
+                                    <i class="far fa-laugh"></i>
+                                </div>
+                                <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
+                                    <div class="emoji-picker">
+                                        <div class="emoji-picker-search">
+                                            <input type="text" v-model="search" v-focus placeholder="Search...">
+                                        </div>
+                                        <div>
+                                            <div v-for="(emojiGroup, category) in emojis" :key="category">
+                                                <h5>{{ category }}</h5>
+                                                <div class="emojis">
+                                                    <span v-for="(emoji, emojiName) in emojiGroup" :key="emojiName"
+                                                        @click="insert(emoji)" :title="emojiName">{{ emoji }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </emoji-picker>
+                            <i class="fas fa-paperclip"></i>
+                            <div class="upload" id="popup">
+                                <i class="far fa-image" id="localImage"></i>
+                                <input type="file" id="file" accept="image/*" hidden>
+                            </div>    
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Notification -->
+    <div class="notification" id="notification">
+    </div>
+
+
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script src="js/signalr.js"></script>
+    <script src="js/image.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
+    <script src="https://unpkg.com/vue-emoji-picker/dist/vue-emoji-picker.js"></script>
+    <script>
+        $('.leave-img').mouseover(function(){
+            $('.textt').css({'opacity': '1'});
+        });
+
+        $('.leave-img').mouseleave(function(){
+            $('.textt').css('opacity', '0');
+        });
+
+        $(".leave-img").on("click", (e) => {
+            window.location = "gameroom.html";
+      });
+
+        // Canvas Property ======================================================================================================
+        let canvas = document.getElementById('ctx');
+        let ctx = canvas.getContext('2d');
+
+        // for pencil
+        let arr = [];   // curve
+
+        let eraserSizeMultiply = 7;
+
+        // for undo and redo action
+        let undoArr = [];
+        let redoArr = [];
+
+        // For Canvas Cursor
+        let cursorX = 0;
+        let cursorY = 0;
+
+        // this is to detect if the user is leftClicking on the canvas
+        // if user is leftClicking do some action in onkeydown event
+        let isLeftClicking = false;
+
+        // for lineStart position
+        // this is for all tools except pencil and eraser (6 tools)
+        let lineStart = null;
+
+        // Check if the user is drawer
+        let isDrawer = false;
+
+        // initial canvas
+        clearCanvas();      // draw all black
+        disableCanvas();    // disable canvas tools
+
+
+        // Canvas Function ======================================================================================================
+        // Disable Canvas Tools
+        function disableCanvas() {
+            isDrawer = false;
+            $('.tools input, .tools button').prop('disabled', true);
+            $('.tools').css('opacity', 0.3);
+            $('.canvas').css('border', '1px solid red');
+            lineStart = null;                    // Refresh the lineStart position
+            $('#svg').html('').hide();           // display svg none
+            $('#pencilCursor, #eraserCursor').css('display', 'none'); // remove all canvas cursor
+            // refresh undo and redo state
+            undoArr = [];
+            redoArr = [];
+        }
+
+        // Enable Canvas Tools
+        function enableCanvas() {
+            $('.tools input, .tools button').prop('disabled', false);
+            $('.tools').css('opacity', 1);
+            $('.canvas').css('border', '1px solid yellow');
+            $('input[name=toolset]').first().prop('checked', true);
+
+            isDrawer = true;
+        }
+
+        function storeUndoState() {
+            //undoArr.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+            undoArr.push(canvas.toDataURL());
+            redoArr = [];
+        }
+
+        function undoAction() {
+            if (undoArr.length) {
+                let undoCanvas = undoArr.pop();
+                let currentCanvas = canvas.toDataURL();
+                con.invoke('SendImageData', undoCanvas);
+                redoArr.push(currentCanvas);
+            }
+        }
+
+        function redoAction() {
+            if (redoArr.length) {
+                let redoCanvas = redoArr.pop();
+                let currentCanvas = canvas.toDataURL();
+                con.invoke('SendImageData', redoCanvas);
+                undoArr.push(currentCanvas);
+            }
+        }
+
+        function drawFillRect(lineStart, lineWidth, rectSize, strokeColor, fillColor) {
+            ctx.lineWidth = lineWidth;
+            ctx.lineCap = 'butt';
+            ctx.lineJoin = 'miter';
+            ctx.strokeStyle = strokeColor;
+            ctx.fillStyle = fillColor;
+            ctx.fillRect(lineStart.x, lineStart.y, rectSize.x, rectSize.y);
+            ctx.strokeRect(lineStart.x, lineStart.y, rectSize.x, rectSize.y);
+        }
+
+        function drawStrokeRect(lineStart, lineWidth, rectSize, strokeColor) {
+            ctx.lineWidth = lineWidth;
+            ctx.lineCap = 'butt';
+            ctx.lineJoin = 'miter';
+            ctx.strokeStyle = strokeColor;
+            ctx.strokeRect(lineStart.x, lineStart.y, rectSize.x, rectSize.y);
+        }
+
+        function drawFillCircle(lineStart, lineWidth, circleSize, circleMid, circleTranslate, strokeColor, fillColor) {
+            ctx.beginPath();
+            ctx.lineWidth = lineWidth;
+            ctx.lineCap = 'butt';
+            ctx.lineJoin = 'miter';
+            ctx.strokeStyle = strokeColor;
+            ctx.fillStyle = fillColor;
+            ctx.translate(circleTranslate.x, circleTranslate.y);
+            ctx.ellipse(circleMid.x, circleMid.y, Math.abs(circleSize.x), Math.abs(circleSize.y), 0, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+            // Reset current transformation matrix to the identity matrix
+            ctx.setTransform(1, 0, 0, 1, 0, 0); 
+        }
+
+        function drawStrokeCircle(lineStart, lineWidth, circleSize, circleMid, circleTranslate, strokeColor) {
+            ctx.beginPath();
+            ctx.lineWidth = lineWidth;
+            ctx.lineCap = 'butt';
+            ctx.lineJoin = 'miter';
+            ctx.strokeStyle = strokeColor;
+            ctx.translate(circleTranslate.x, circleTranslate.y);
+            ctx.ellipse(circleMid.x, circleMid.y, Math.abs(circleSize.x), Math.abs(circleSize.y), 0, 0, 2 * Math.PI);
+            ctx.stroke();
+            // Reset current transformation matrix to the identity matrix
+            ctx.setTransform(1, 0, 0, 1, 0, 0); 
+        }
+
+        function drawLineDash(a, b, lineWidth, strokeColor) {
+            ctx.beginPath();
+            ctx.setLineDash([5, 10]);
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.lineWidth = lineWidth;
+            ctx.strokeStyle = strokeColor;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+            // Reset back the line dash
+            ctx.setLineDash([]);
+        }
+
+        function drawLine(a, b, lineWidth, strokeColor) {
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.lineWidth = lineWidth;
+            ctx.strokeStyle = strokeColor;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+        }
+
+        function drawCurve(a, b, c, lineWidth, strokeColor) {
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.quadraticCurveTo(b.x, b.y, c.x, c.y);
+            ctx.lineWidth = lineWidth;
+            ctx.strokeStyle = strokeColor;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function mid(a, b) {
+            return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+        }
+
+        function inDrawingPencil(size, strokeColor, e) {
+            // 1. Add start point (if needed)
+            if (arr.length == 0) {
+                // STORE UNDO STATE
+                storeUndoState();
+
+                arr.push({ x: e.offsetX - e.originalEvent.movementX, y: e.offsetY - e.originalEvent.movementY });
+            }
+
+            // 2. Add new point
+            arr.push({ x: e.offsetX, y: e.offsetY });
+            arr = arr.slice(-3); // keep the last 3 points only
+
+            if (arr.length >= 3) {
+                // arr = [0, 1, 2]
+                let a = mid(arr[0], arr[1]);
+                let b = arr[1];
+                let c = mid(arr[1], arr[2]);
+                con.invoke('SendCurve', a, b, c, size, strokeColor);
+            }
+            else {
+                // arr = [0, 1]
+                let a = arr[0];
+                let b = mid(arr[0], arr[1]);
+                con.invoke('SendLine', a, b, size, strokeColor);
+            }
+        }
+
+        function outDrawingPencil(size, strokeColor) {
+            if (arr.length >= 2) {
+                arr = arr.slice(-2); // Keep last 2 points only
+                // arr = [0, 1]
+                let a = mid(arr[0], arr[1]);
+                let b = arr[1];
+                con.invoke('SendLine', a, b, size, strokeColor);
+            }
+
+            arr = [];
+        }
+
+        function eraser(size, cursor) {
+            ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+            let midpointX = cursor.x - (size * eraserSizeMultiply / 2);
+            let midpointY = cursor.y - (size * eraserSizeMultiply / 2);
+            ctx.fillRect(midpointX, midpointY, size * eraserSizeMultiply, size * eraserSizeMultiply);
+        }
+
+        function pointIsZero(x, y) {
+            if (x == 0 || y == 0) { return true }
+        }
+
+        // Canvas Keyboard Event ==========================================================================================================
+        $(document).on('keydown', e => {
+
+            // if not drawer, do nothing
+            if (!isDrawer) { return; }
+
+            // Get Key Code
+            let keyCode = e.originalEvent.code;
+
+            // This is if the user want to undo, redo and clear action
+            if (e.ctrlKey && keyCode == 'KeyZ') {
+                $('#undoBtn').trigger('click');
+                return;
+            }
+            else if (e.ctrlKey && keyCode == 'KeyY') {
+                $('#redoBtn').trigger('click');
+                return;
+            }
+            else if (keyCode == 'Escape') {
+                $('#clearBtn').trigger('click');
+                return;
+            }
+
+            // Tools properties
+            let size        = parseInt($('#size').val());
+            let strokeColor = $('#strokeColor').val();
+
+            // this is for refreshing tools when keydown
+            // if he is drawing and switching the tools at the same time
+            let tool = $('input[name=toolset]:checked').val();
+            switch (keyCode) {
+                case 'Digit1':
+                case 'Digit2':
+                case 'Digit3':
+                case 'Digit4':
+                case 'Digit5':
+                case 'Digit6':
+                case 'Digit7':
+                case 'Digit8':
+                    // Disabled all cursor
+                    $('#pencilCursor, #eraserCursor').css('display', 'none'); 
+
+                    // if using pencil drawing
+                    // complete the line
+                    if (isLeftClicking && tool == 'pencil') {
+                        outDrawingPencil(size, strokeColor);
+                    }
+
+                    // Set back SVG lineStart to null, and hide svg
+                    // This is for all tools except pencil and eraser (6 tool)
+                    lineStart = null;
+                    $('#svg').html('').hide();
+                    break;
+                default:
+                    // if none of the above, stop execution
+                    return;
+            }
+
+            // this is to checked the shortcut key
+            // and also display custom cursor if within the canvas
+            switch (keyCode) {
+                case 'Digit1':
+                    $('#pencil').prop('checked', true);
+                    // if user is hovering canvas
+                    if ($('#ctx:hover').length) {
+                        $('#pencilCursor').css({
+                            'display': 'block',
+                            'left': cursorX,
+                            'top': cursorY
+                        });
+                    }
+                    break;
+                case 'Digit2': 
+                    $('#eraser').prop('checked', true);  
+                    // if user is hovering canvas 
+                    if ($('#ctx:hover').length) {
+                        $('#eraserCursor').css({
+                            'display': 'block',
+                            'left': cursorX,
+                            'top': cursorY
+                        });
+
+                        // if left clicking and switch to eraser tool, apply eraser pointerdown
+                        // only for eraser tools
+                        if (isLeftClicking) {
+                            $('#ctx').trigger('pointerdown');
+                        }
+                    }  
+                    break;
+                case 'Digit3': 
+                    $('#line').prop('checked', true);         
+                    break;
+                case 'Digit4': 
+                    $('#lineDash').prop('checked', true);     
+                    break;
+                case 'Digit5': 
+                    $('#fillSquare').prop('checked', true);   
+                    break;
+                case 'Digit6': 
+                    $('#strokeSquare').prop('checked', true); 
+                    break;
+                case 'Digit7': 
+                    $('#fillCircle').prop('checked', true);   
+                    break;
+                case 'Digit8': 
+                    $('#strokeCircle').prop('checked', true); 
+                    break;
+            }
+        });
+
+        // Canvas Cursor Event ==========================================================================================================
+
+        // To set the custom cursor
+        // and to get the cursor location
+        $('#ctx').on('pointerover pointermove', e => {
+
+            // if not drawer, do nothing
+            if (!isDrawer) { return; }
+
+            // to record cursor location
+            cursorX = e.offsetX;
+            cursorY = e.offsetY;
+
+            let tool = $('input[name=toolset]:checked').val();
+
+            // Disable all cursor first
+            $('#pencilCursor, #eraserCursor').css('display', 'none'); 
+
+            // Display specific cursor depends on tools
+            if (tool == "pencil") {
+                $('#pencilCursor').css({
+                    'display': 'block',
+                    'left': cursorX,
+                    'top': cursorY
+                });
+            }
+            else if (tool == "eraser") {
+                $('#eraserCursor').css({
+                    'display': 'block',
+                    'left': cursorX,
+                    'top': cursorY
+                });
+            }
+        });
+
+        // Remove all curser when leave
+        $('#ctx').on('pointerleave', e => {
+            // if not drawer, do nothing
+            if (!isDrawer) { return; }
+            // make all cursor disappear
+            $('#pencilCursor, #eraserCursor').css('display', 'none');
+        });
+
+        // To Check if the user left clicking on canvas
+        $('#ctx').on('pointerdown pointermove pointerleave', e => {
+            // if not drawer, do nothing
+            if (!isDrawer) { return; }
+
+            // if left clicking
+            if (e.buttons == 1 && e.originalEvent.isPrimary) {
+                isLeftClicking = true;
+            }
+        })
+
+        // Cancel Left Clicking when pointerup or pointerleave
+        $(document).on('pointerup', e => {
+            // set to false
+            isLeftClicking = false;
+        })
+
+        // Canvas Pencil Drawing Event =========================================================================================================
+        
+        $('#ctx').on('pointermove pointerleave', e => {
+
+            // if not drawer, do nothing
+            if (!isDrawer) { return; }
+
+            let tool = $('input[name=toolset]:checked').val();
+
+            // if not pencil tool, do nothing
+            if (tool != 'pencil') { return; }
+
+            // if not left clicking, do nothing
+            if (!isLeftClicking) { return; }
+
+            // Tools properties
+            let size        = parseInt($('#size').val());
+            let strokeColor = $('#strokeColor').val();
+
+            // remove all the selection when drawing
+            window.getSelection().removeAllRanges();
+            inDrawingPencil(size, strokeColor, e);
+            
+        });
+
+        $('#ctx').on('pointerup pointerleave', e => {
+
+            // if not drawer, do nothing
+            if (!isDrawer) { return; }
+
+            let tool = $('input[name=toolset]:checked').val();
+
+            // if not pencil tool, dont do nothing
+            if (tool != 'pencil') { return; }
+
+            // Tools properties
+            let size        = parseInt($('#size').val());
+            let strokeColor = $('#strokeColor').val();
+            
+            // draw out final line
+            outDrawingPencil(size, strokeColor);
+        });
+
+        // Canvas Eraser Drawing Event ==========================================================================================
+        $('#ctx').on('pointerdown', e => {
+
+            // if not drawer, do nothing
+            if (!isDrawer) { return; }
+
+            let tool = $('input[name=toolset]:checked').val();
+
+            // if not eraser tool, do nothing
+            if (tool != 'eraser') { return; }
+
+            // if not leftcliking, do nothing
+            if (!isLeftClicking) { return; }
+
+            // Store undo state
+            storeUndoState();
+            
+            // Erase
+            let size = parseInt($('#size').val());
+            let cursor = { x: cursorX, y: cursorY };
+            window.getSelection().removeAllRanges();
+            
+            con.invoke('SendErase', size, cursor);
+        })
+
+        $('#ctx').on('pointermove', e => {
+
+            // if not drawer, do nothing
+            if (!isDrawer) { return; }
+
+            let tool = $('input[name=toolset]:checked').val();
+
+            // if not eraser tool, do nothing
+            if (tool != 'eraser') { return; }
+
+            // if not leftcliking, do nothing
+            if (!isLeftClicking) { return; }
+
+            // Tools properties
+            let size = parseInt($('#size').val());
+            // Set Cursor
+            let cursor = { x: e.offsetX, y: e.offsetY };
+            // remove all the selection when erasing
+            window.getSelection().removeAllRanges();
+            con.invoke('SendErase', size, cursor);
+        })
+
+        // Canvas Line Tool Drawing Event =====================================================================================
+        function drawSVG(tool, lineStart, cursor, strokeColor, fillColor, size) {
+
+            // Calculate the width and height of the shape
+            let rectSize = {
+                x: cursor.x - lineStart.x,
+                y: cursor.y - lineStart.y
+            }
+
+            // Calculate Rect Translate, if there is no negative, become 0
+            let rectTranslate = {
+                x: (rectSize.x < 0 ? rectSize.x : 0),
+                y: (rectSize.y < 0 ? rectSize.y : 0)
+            };
+
+            // Calculate the radius of the circle
+            let circleSize = {
+                x: (cursor.x - lineStart.x) / 2,
+                y: (cursor.y - lineStart.y) / 2
+            };
+
+            // Calculate the midpoint of the circle
+            let circleMid = {
+                x: (cursor.x + lineStart.x) / 2,
+                y: (cursor.y + lineStart.y) / 2
+            };
+
+            // Calculate Circle Translate, if there is no negative, become 0
+            let circleTranslate = {
+                x: (circleMid.x < 0 ? circleMid.x : 0),
+                y: (circleMid.y < 0 ? circleMid.y : 0)
+            }
+
+            switch (tool) {
+                case 'line':
+                    $('#svg').html(`
+                        <line x1="${lineStart.x}" x2="${cursor.x}" y1="${lineStart.y}" y2="${cursor.y}" stroke="${strokeColor}" stroke-width="${size}" 
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                    `);
+                    break;
+                case 'line-dash':
+                    $('#svg').html(`
+                        <line x1="${lineStart.x}" y1="${lineStart.y}" x2="${cursor.x}" y2="${cursor.y}" stroke="${strokeColor}" stroke-width="${size}" 
+                        stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 10" />
+                    `);
+                    break;
+                case 'fill-square':
+                    $('#svg').html(`
+                        <rect x="${lineStart.x}" y="${lineStart.y}" width="${Math.abs(rectSize.x)}" height="${Math.abs(rectSize.y)}" stroke="${strokeColor}" 
+                        stroke-width="${size}" fill="${fillColor}" transform="translate(${rectTranslate.x}, ${rectTranslate.y})" />
+                    `);
+                    break;
+                case 'stroke-square':
+                    $('#svg').html(`
+                        <rect x="${lineStart.x}" y="${lineStart.y}" width="${Math.abs(rectSize.x)}" height="${Math.abs(rectSize.y)}" stroke="${strokeColor}" 
+                        stroke-width="${size}" fill="transparent" transform="translate(${rectTranslate.x}, ${rectTranslate.y})" />
+                    `);
+                    break;
+                case 'fill-circle':
+                    $('#svg').html(`
+                        <ellipse cx="${circleMid.x}" cy="${circleMid.y}" rx="${Math.abs(circleSize.x)}" ry="${Math.abs(circleSize.y)}" stroke="${strokeColor}" 
+                        stroke-width="${size}" fill="${fillColor}" transform="translate(${circleTranslate.x}, ${circleTranslate.y})" />
+                    `);
+                    break;
+                case 'stroke-circle':
+                    $('#svg').html(`
+                        <ellipse cx="${circleMid.x}" cy="${circleMid.y}" rx="${Math.abs(circleSize.x)}" ry="${Math.abs(circleSize.y)}" stroke="${strokeColor}" 
+                        stroke-width="${size}" fill="transparent" transform="translate(${circleTranslate.x}, ${circleTranslate.y})" />
+                    `);
+                    break;
+                default: 
+                    return;
+            }
+        }
+
+        $('#ctx').on('pointermove', e => {
+
+            // if not drawer, do nothing
+            if (!isDrawer) { return; }
+
+            let tool = $('input[name=toolset]:checked').val();
+
+            // if is pencil or eraser tool, do nothing
+            if (!tool || tool == 'pencil' || tool == 'eraser') {
+                return;
+            }
+
+            // if not left clicking, return
+            if (!isLeftClicking) { return; }
+
+            // if lineStart is null, set the line start, and show the svg
+            if (lineStart == null) {
+                lineStart = {x: e.offsetX, y: e.offsetY};
+                $('#svg').show();
+            }
+
+            // Tools properties
+            let size = parseInt($('#size').val());
+            let strokeColor = $('#strokeColor').val();
+            let fillColor = $('#fillColor').val();
+            let cursor = { x: e.offsetX, y: e.offsetY }
+
+            drawSVG(tool, lineStart, cursor, strokeColor, fillColor, size);
+        });
+
+        $('#ctx').on('pointerup pointerleave', e => {
+
+            // if not drawer, do nothing
+            if (!isDrawer) { return; }
+
+            let tool = $('input[name=toolset]:checked').val();
+
+            // if is pencil or eraser tool, do nothing
+            if (!tool || tool == 'pencil' || tool == 'eraser') {
+                return;
+            }
+
+            // if lineStart is null, do nothing
+            if (lineStart == null) { return; }
+
+            // Tools properties
+            let size        = parseInt($('#size').val());
+            let strokeColor = $('#strokeColor').val();
+            let fillColor = $('#fillColor').val();
+            let endPoint    = { x: e.offsetX, y: e.offsetY };
+
+            // Calculate the distance of line
+            let lineSize = {
+                x: e.offsetX - lineStart.x,
+                y: e.offsetY - lineStart.y
+            };
+
+            // Calculate the width and height of the shape
+            let rectSize = {
+                x: e.offsetX - lineStart.x,
+                y: e.offsetY - lineStart.y
+            };
+
+            // Calculate the radius of the circle
+            let circleSize = {
+                x: (e.offsetX - lineStart.x) / 2,
+                y: (e.offsetY - lineStart.y) / 2
+            };
+
+            // Calculate the midpoint of the circle
+            let circleMid = {
+                x: (e.offsetX + lineStart.x) / 2,
+                y: (e.offsetY + lineStart.y) / 2
+            };
+
+            // Calculate Circle Transform
+            let circleTranslate = {
+                x: (circleMid.x < 0 ? circleMid.x : 0),
+                y: (circleMid.y < 0 ? circleMid.y : 0)
+            }
+
+            // to check if point has zero
+            let hasZero = false;
+
+            // this is for checking tool length
+            switch (tool) {
+                case 'line':
+                case 'line-dash':
+                    hasZero = (pointIsZero(lineSize.x, lineSize.y)) ? true : false;
+                    break;
+                case 'fill-square':
+                case 'stroke-square':
+                    hasZero = (pointIsZero(rectSize.x, rectSize.y)) ? true : false;
+                    break;
+                case 'fill-circle':
+                case 'stroke-circle':
+                    hasZero = (pointIsZero(circleSize.x, circleSize.y)) ? true : false;
+                    break;
+            }
+
+            // if has zero point, dont paint them
+            if (hasZero) {
+                // Refresh the lineStart position
+                lineStart = null;
+                $('#svg').html('').hide();
+                return;
+            }
+
+            storeUndoState(); // For Undo Action
+
+            // This is for painting
+            switch (tool) {
+                case 'line':
+                    con.invoke('SendLine', lineStart, endPoint, size, strokeColor);
+                    break;
+                case 'line-dash':
+                    con.invoke('SendLineDash', lineStart, endPoint, size, strokeColor);
+                    break;
+                case 'fill-square':
+                    con.invoke('SendFillRect', lineStart, size, rectSize, strokeColor, fillColor);
+                    break;
+                case 'stroke-square':
+                    con.invoke('SendStrokeRect', lineStart, size, rectSize, strokeColor);
+                    break;
+                case 'fill-circle':
+                    con.invoke('SendFillCircle', lineStart, size, circleSize, circleMid, circleTranslate, strokeColor, fillColor);
+                    break;
+                case 'stroke-circle':
+                    con.invoke('SendStrokeCircle', lineStart, size, circleSize, circleMid, circleTranslate, strokeColor);
+                    break;
+                default: 
+                    return;
+            }
+
+            // Refresh the lineStart position
+            lineStart = null;
+            $('#svg').html('').hide();
+        });
+
+        // Canvas Sizing Wheel Event ============================================================================================
+        $('#ctx').on('wheel', e => {
+
+            // if not drawer, do nothing
+            if (!isDrawer) { return; }
+            
+            e.preventDefault();
+            let dy = e.originalEvent.deltaY;
+
+            if (dy < 0) {
+                $('#size')[0].stepUp();
+            }
+            else {
+                $('#size')[0].stepDown();
+            }
+
+            $('#size').trigger('change');
+        });
+
+        // Tools Button Event ===================================================================================================
+        $('#clearBtn').on('click', e => {
+            storeUndoState();
+            con.invoke('SendClear');
+        });
+
+        $('#undoBtn').on('click', e => {
+            undoAction();
+        });
+
+        $('#redoBtn').on('click', e => {
+            redoAction();
+        });
+
+        // On Change Event ======================================================================================================
+        $('#size').on('change', e => {
+            $('#pencilCursor').css({
+                'width': e.currentTarget.value + 'px',
+                'height': e.currentTarget.value + 'px'
+            });
+
+            $('#eraserCursor').css({
+                'width': e.currentTarget.value * eraserSizeMultiply + 'px',
+                'height': e.currentTarget.value * eraserSizeMultiply + 'px'
+            });
+        });
+
+        // Set the size first
+        $('#size').trigger('change');
+
+        // Helper Function or Global Function ===================================================================================
+        // Prevent XSS attack
+        function sanitize(string) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#x27;',
+                "/": '&#x2F;',
+            };
+            const reg = /[&<>"'/]/ig;
+            return string.replace(reg, (match)=>(map[match]));
+        }
+
+        function copyToClipboard(text) {
+            var input = document.body.appendChild(document.createElement("input"));
+            input.value = text;
+            input.focus();
+            input.select();
+            document.execCommand('copy');
+            input.parentNode.removeChild(input);
+            $('#copyPopup').show().delay(3000).fadeOut();
+        }
+
+        // Display User Container
+        function displayUserList(username, photo, host = null, score = 0, drawer) {
+
+            return `<div class="userlist ${(username != sessionStorage.getItem('name')) ? 'user-select' : ''}" data-user="${sanitize(username)}">
+                        <div class="photo-container">
+                            <img class="photo" src="${sanitize(photo)}">
+                            ${(username == host) 
+                                ?   `<div class="fa-crown-container"><i class="fas fa-crown"></i></div>` 
+                                :   ``}
+                        </div>
+                        <div class="user-detail-container">
+                            <div class="username">
+                                ${sanitize(username)}
+                            </div>
+                            <div class="score">
+                                ${score} score
+                            </div>
+                        </div>
+                        <div class="action-container">
+                            ${(username == sessionStorage.getItem('name')) 
+                                ?   `<div>
+                                    <!--<i class="fas fa-arrow-left"></i>-->
+                                    <i class="fas fa-gamepad" style="font-size:24px; color: yellow; padding: 5px;"></i>
+                                    </div>` 
+                                :   ``}
+                            ${(drawer == username)
+                                ?   `<div class="drawerLogo">
+                                    <i class="fa-solid fa-paintbrush-pencil"></i>
+                                    </div>` 
+                                :   ``}
+                        </div>
+                    </div>`;
+        }
+
+        // Display Empty Container
+        function displayEmptyUser() {
+            return `<div class="userlist">
+                        <div class="photo-container">
+                            <img class="photo" src="avatar/empty.png">
+                        </div>
+                        <div class="empty-container">
+                            Empty 😭
+                        </div>
+                    </div>`;
+        }
+
+        function checkBottom(ele) {
+            return ((ele.clientHeight + 40) > ele.scrollHeight - ele.scrollTop);
+        }
+
+        function appendChat(chatId, message = `Empty`) {
+            let chat = $(chatId);
+
+            let isBottom = checkBottom(chat[0]);
+
+            chat.append(message);
+
+            // if the chat has too much chat, remove the oldest chat
+            // maximum 30
+            if (chat.children().length > 30) {
+                chat.children().eq(1).remove();
+            }
+
+            // if is bottom, scroll to bottom
+            if (isBottom) { chat.scrollTop(chat[0].scrollHeight); }
+        }
+
+        // This is for simple chat
+        let simpleChatSpam = {
+            recentChat: Date.now(),    // to record the first time simpleChat
+            chatTimes: 0,              // to record how many time he had chat
+            penaltyTime: null          // to know that users get penalty
+        };
+
+        // this is for answer chat
+        // let answerChatSpam = {
+        //     recentChat: Date.now(),    // to record the first time simpleChat
+        //     chatTimes: 0,              // to record how many time he had chat
+        //     penaltyTime: null          // to know that users get penalty
+        // }
+
+        // if user chat 5 times within 4 seconds, he/she will get penalty for 3 seconds
+        function isSpam(chatId) {
+
+            let tempChat;
+
+            if (chatId == "#simpleChat") {
+                tempChat = simpleChatSpam;
+            }
+            // else if (chatId == "#answerChat") {
+            //     tempChat = answerChatSpam;
+            // }
+            else {
+                return true;
+            }
+
+            // if user gets penalty, user cannot chat for 3 seconds
+            if (tempChat.penaltyTime &&
+                Date.now() - tempChat.penaltyTime < 3000) {
+                    
+                appendChat(chatId, `
+                    <div class="color-orange">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Do not spam the chat! 
+                    </div>
+                `);
+                return true;
+            }
+            else {
+                // else set back the penalty to null
+                tempChat.penaltyTime = null;
+            }
+
+            // if already passed 4 seconds
+            // reset chat time and recent chat
+            if (Date.now() - tempChat.recentChat >= 4000) {
+                // reset chat times
+                tempChat.chatTimes = 0;
+                tempChat.recentChat = Date.now();
+            }
+
+            // within 4 seconds, if user chat for 5 times, get penalty
+            if (tempChat.chatTimes >= 5) {
+
+                // reset chat times and recent chat time
+                privateChatTimes = 0;
+                privateRecentChat = Date.now();
+
+                // get penalty
+                tempChat.penaltyTime = Date.now();
+                appendChat(chatId, `
+                    <div class="color-orange">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Do not spam the chat! 
+                    </div>
+                `);
+                return true;
+            }
+
+            // count how many times
+            tempChat.chatTimes++;
+            return false;
+        }
+
+         // NOT allow the text box to send answer
+        // function disableAnswerChat(placeholder = 'Wait for guessing time') {
+        //     $('#answerChatText').val('').prop('disabled', true).prop('placeholder', placeholder);
+        //     $('#answerChatBtn').prop('disabled', true);
+        // }
+
+        // for progress bar animation
+        function progressBar(timeTaken, percentage) {
+
+            $('#bar').stop()
+                     .css('width', `${percentage}%`)
+                     .animate({
+                         width: '0%'
+                     }, timeTaken, 'linear');
+        }
+
+        let loseTurnTimeout = null;
+        let drawerReadyTimeout = null;
+        let answerTimeout = null;
+
+        // Clear all timeout
+        function stateClearTimeout() {
+            clearTimeout(loseTurnTimeout);
+            clearTimeout(drawerReadyTimeout);
+            clearTimeout(answerTimeout);
+            $('#bar').stop().css('width', '100%');
+        }
+
+        function playDrawerSound() {
+            // play audio
+            // since chrome 66 does not allow play audio without interaction, ignores it then
+            var audio = new Audio('audio/feedback.wav');
+            audio.volume = 0.4;
+            audio.play();
+        }
+
+        // Connect to the hub ====================================================================================================================
+        const con = new signalR.HubConnectionBuilder()
+            .withUrl(`/apphub?username=${encodeURIComponent(username)}&groupId=${encodeURIComponent(groupId)}&photo=${encodeURIComponent(photo)}`)
+            .build();
+
+        // Hub Event =============================================================================================================================
+        // Navigate to home page if duplicate username
+        con.on('DuplicateUser', () => {
+            sessionStorage.setItem('nameError', true);
+            window.location = "/";
+        });
+
+        // Show the container if username is valid
+        con.on('ShowContainer', () => $('#container').show() );
+
+        // Not allow enter because of some reason
+        con.on('NotAllowedEnter', (reason) => {
+            alert(reason);
+            window.location = "gameroom.html"; 
+        });
+
+        // CANVAS DRAWING =====================================================================================
+        con.on('ReceiveFillRect', drawFillRect);
+        con.on('ReceiveStrokeRect', drawStrokeRect);
+        con.on('ReceiveFillCircle', drawFillCircle);
+        con.on('ReceiveStrokeCircle', drawStrokeCircle);
+        con.on('ReceiveLine', drawLine);
+        con.on('ReceiveCurve', drawCurve);
+        con.on('ReceiveErase', eraser);
+        con.on('ReceiveLineDash', drawLineDash);
+        con.on('ReceiveClear', clearCanvas);
+        con.on('ReceiveImageData', (data) => {
+            // to check if data is null or not
+            // this is when user entering, we will call this method as well
+            // so that we want to check the canvasURL is null or not
+            if (data) {
+                var img = new Image(705, 446);
+                img.onload = function() {
+                    ctx.drawImage(img,0,0);
+                }; 
+                img.src = data;
+            } 
+        });
+        con.on('EnableCanvas', enableCanvas);
+        con.on('DisableCanvas', disableCanvas);
+        con.on('CanvasGreen', () => $('.canvas').css('border', '1px solid green'));
+        con.on('CanvasRed', () => $('.canvas').css('border', '1px solid red'));
+        con.on('GetCanvas', () => {
+            con.invoke('RecordCanvas', canvas.toDataURL());
+        });
+
+        // GAME STATUS ========================================================================================
+        // Update User List when caller user connects
+        con.on('ShowUserList', (orderedUser, host, userDetails, drawer) => {
+
+            let userContainer = $('.user');
+            let count = 1;
+
+            // Refresh the userlist
+            userContainer.html('');
+
+            // append the score ordered user
+            $.each(orderedUser, (user, score) => {
+                // append the user list
+                userContainer.append(
+                    displayUserList(user, userDetails[user].photo, host, score, drawer)
+                );
+
+                // count the member for later append empty userContainer
+                count++;
+            });
+
+            // append the empty userContainer
+            for (count; count <= 5; count++) {
+                userContainer.append(
+                    displayEmptyUser()
+                );
+            }
+            
+        });
+
+        // Receive Simple/Chat Message
+        con.on('ReceiveMessage', (message, name, chatId) => {
+
+            let currentName = sessionStorage.getItem('name');
+
+            appendChat(chatId, 
+            `
+                <div>
+                    <span class="${name == currentName ? 'caller' : 'others'}">${sanitize(name)}: </span>
+                    <span class="color-lightgrey">${sanitize(message)}</span>
+                </div>
+            `);
+        });
+
+        // Receive Correct Message
+        // when the user guessed the answer
+        con.on('ReceiveCorrectMessage', (word) => {
+
+            appendChat('#simpleChat', 
+            `
+                <div class="color-green">
+                    <i class="fas fa-check-circle"></i>
+                    <span class="bold">${word}</span> is correct! 
+                </div>
+            `);
+
+            // NOT allow the text box to send answer
+            // disableAnswerChat("You had guessed it!");
+        });
+
+        // Receive Hit Message
+        // when other user hit the answer
+        con.on('ReceiveHitMessage', (name) => {
+
+            appendChat('#simpleChat', 
+            `
+                <div class="color-green">
+                    <i class="fas fa-check-circle"></i>
+                    <span class="bold">${sanitize(name)}</span> hit! 
+                </div>
+            `);
+        });
+
+        // Receive Warning Message
+        // when user typed in direct answer
+        con.on('ReceiveWarningMessage', () => {
+
+            appendChat('#simpleChat', 
+            `
+                <div class="color-orange">
+                    <i class="fas fa-times-circle"></i>
+                    Directly typed answer is not allowed!  
+                </div>
+            `);
+        });
+
+        // clear all timeout for changing status
+        // mostly used for DRAWER
+        con.on('StateClearTimeout', stateClearTimeout);
+
+        // Display Waiting Player Status for HOST
+        // when only 1 user left
+        con.on('WaitingPlayerStatus', () => {
+
+            $('#statusContainer').html(`
+                <div class="second-status">
+                    Wait for player to join ...
+                </div>
+            `);
+        });
+
+        // Display Start Button Status for HOST
+        // when there are 2 or more user
+        con.on('HostStartStatus', () => {
+
+            $('#statusContainer').html(`
+                <div class="first-status">
+                    <button class="button" id="startBtn"> Start </button>
+                </div>
+                <div class="second-status">
+                    Everyone is waiting for you to start!
+                </div>
+            `);
+        });
+
+        // Display Waiting Host Status for NON-HOST
+        // when there are 2 or more user
+        con.on('WaitingHostStatus', () => {
+
+            $('#statusContainer').html(`
+                <div class="second-status">
+                    Wait for host to start ...
+                </div>
+            `);
+        });
+
+
+        // Set Interval after drawing state
+        con.on('InsertInterval', () => {
+            appendChat('#simpleChat', 
+            `
+                <div style="color: #b3b3b3; font-weight: bold;">
+                    <i class="fas fa-clock"></i>
+                    Interval ...
+                </div>
+            `
+            );
+        });
+
+        // Display who is in turn of drawing status
+        // this is for DRAWER
+        con.on('TurnDrawingStatus', (word, timeTaken, drawingLosesTurnTime, percentage = 100) => {
+            $('#statusContainer').html(`
+                <div class="first-status">
+                    <button class="button" id="drawBtn"> Draw </button>
+                    <button class="button" style="margin-left: 0.4em;" id="skipBtn"> Skip Turn </button>
+                </div>
+                <div class="second-status text-guess">
+                    ${word}
+                </div>
+            `);
+
+            progressBar(timeTaken, percentage);
+            playDrawerSound();
+
+            // turn to DrawingLosesTurn after 5 seconds
+            loseTurnTimeout = setTimeout(() => con.invoke('DrawingLosesTurn'), timeTaken);
+            // turn to DrawingReady after 10 seconds
+            drawerReadyTimeout = setTimeout(() => con.invoke('DrawingReady'), timeTaken + drawingLosesTurnTime);
+        });
+
+        // Display who is in turn of drawing status
+        // this is for GUESSER
+        con.on('WhoTurnDrawingStatus', (drawer, timeTaken, percentage = 100) => {
+            $('#statusContainer').html(`
+                <div class="second-status">
+                    It's <span class="name-status">${sanitize(drawer)}</span> Turn ...
+                </div>
+            `);
+
+            progressBar(timeTaken, percentage);
+        });
+
+        // Display who is in turn of drawing status
+        // this is for GUESSER
+        con.on('DrawingLosesTurnStatus', (drawer, timeTaken, percentage = 100) => {
+            $('#statusContainer').html(`
+                <div class="second-status">
+                    <span class="name-status">${sanitize(drawer)}</span> loses turn ...
+                </div>
+            `);
+
+            // remove drawing logo beside user
+            $('.drawerLogo').remove();
+        
+            progressBar(timeTaken, percentage);
+        });
+
+        // Display drawers drawing status
+        // this is for DRAWER, which display the answer, and SKIP TURN btn
+        con.on('DrawerDrawingStatus', (word, timeTaken, answerTime, percentage = 100) => {
+            $('#statusContainer').html(`
+                <div class="first-status">
+                    <button class="button" id="skipBtn"> Skip Turn </button>
+                </div>
+                <div class="second-status text-guess">
+                    ${word}
+                </div>
+            `);
+
+            progressBar(timeTaken, percentage);
+
+            answerTimeout = setTimeout(() => con.invoke('Answer'), timeTaken);
+            drawerReadyTimeout = setTimeout(() => con.invoke('DrawingReady'), timeTaken + answerTime);
+        });
+
+        // Display drawers drawing status
+        // this is for Gusser, which show who is drawing, and REPORT btn
+        con.on('WhoDrawingStatus', (drawer, timeTaken, percentage = 100) => {
+            $('#statusContainer').html(`
+                <div class="first-status">
+                    <button class="button" id="reportBtn"> Report </button>
+                </div>
+                <div class="second-status">
+                    <span class="name-status">${sanitize(drawer)}</span> Drawing ...
+                </div>
+            `);
+
+            // allow the text box to send answer
+            // $('#answerChatText').prop('disabled', false).prop('placeholder', 'Answer');
+            // $('#answerChatBtn').prop('disabled', false);
+            $('#simpleChatText').prop('disabled', false).prop('placeholder', 'Chat');
+            $('#simpleChatBtn').prop('disabled', false);
+
+            progressBar(timeTaken, percentage);
+
+        });
+
+        // Display the drawer skipped status
+        // for all users
+        con.on('DrawingSkippedStatus', (drawer, timeTaken, percentage = 100) => {
+            $('#statusContainer').html(`
+                <div class="second-status">
+                    <span class="name-status">${sanitize(drawer)}</span> Skipped turn ...
+                </div>
+            `);
+
+            // NOT allow the text box to send answer
+            disableAnswerChat();
+
+            // remove drawing logo beside user
+            $('.drawerLogo').remove();
+
+            progressBar(timeTaken, percentage);
+        });
+
+        // Display the drawer reported status
+        // for all users
+        con.on('DrawingReportedStatus', (drawer, timeTaken, percentage = 100) => {
+            $('#statusContainer').html(`
+                <div class="second-status">
+                    <span class="name-status">${sanitize(drawer)}</span> gets reported ...
+                </div>
+            `);
+
+            // NOT allow the text box to send answer
+            disableAnswerChat();
+
+            // remove drawing logo beside user
+            $('.drawerLogo').remove();
+
+            progressBar(timeTaken, percentage);
+        });
+
+        // Display AnswerStatus
+        // this is for timeout drawing, and not everyone guessed the answer.
+        con.on('AnswerStatus', (word, timeTaken, percentage = 100) => {
+            $('#statusContainer').html(`
+                <div class="first-status">
+                    Not everyone got the answer...
+                </div>
+                <div class="second-status">
+                    The answer is <span style="color: orange;">${word}</span>.
+                </div>
+            `);
+
+            // NOT allow the text box to send answer
+            disableAnswerChat();
+
+            // remove drawing logo beside user
+            $('.drawerLogo').remove();
+
+            progressBar(timeTaken, percentage);
+        })
+
+        // Display AnswerCorrectStatus
+        // when everyone guessed the answer.
+        con.on('AnswerCorrectStatus', (word, timeTaken, percentage = 100) => {
+
+            $('#statusContainer').html(`
+                <div class="first-status">
+                    Everyone got the answer!
+                </div>
+                <div class="second-status">
+                    The answer is <span style="color: orange;">${word}</span>.
+                </div>
+            `);
+
+            // NOT allow the text box to send answer
+            disableAnswerChat();
+
+            // remove drawing logo beside user
+            $('.drawerLogo').remove();
+
+            progressBar(timeTaken, percentage);
+        })
+
+        // Display who is the 1st, 2nd, 3rd winners
+        // for concluding the game
+        con.on('WinnerStatus', (topThreeUser, timeTaken, percentage = 100) => {
+            $('#statusContainer').html(`
+                <div class="first-status">
+                    Game Over, here are the winners!
+                </div>
+                <div class="second-status">
+                    <div class="winner-list">
+                        ${
+                            $.map(topThreeUser, (user, i) => {
+                                return `<div> ${i + 1}) ${sanitize(user)} </div>`
+                            }).join("")
+                        }
+                    </div>
+                </div>
+            `);
+
+            progressBar(timeTaken, percentage);
+        });
+
+        // for restarting the timeout for drawer
+        con.on('InvokeDrawingReady', (timeTaken) => {
+            stateClearTimeout();
+            drawerReadyTimeout = setTimeout(() => con.invoke('DrawingReady'), timeTaken);
+        })
+        // ===================================================================================================
+
+        // Enable & Disable Tools ============================================================================
+        con.on('EnableTools', () => {
+            $('.canvas').css('border', '2px solid green');
+            $('input[name=toolset][type=radio]').prop('disabled', false);
+            $('#clearBtn, #undoBtn, #redoBtn, #fillColor, #strokeColor, #size, #opacity').prop('disabled', false);
+            $('.tools').css({
+                'opacity': 1,
+                'pointer-events': '',
+                'user-select': ''
+            });
+        });
+        con.on('DisableTools', () => {
+            $('.canvas').css('border', '2px solid red');
+            $('input[name=toolset][type=radio]').prop('disabled', true);
+            $('#clearBtn, #undoBtn, #redoBtn, #fillColor, #strokeColor, #size, #opacity').prop('disabled', true);
+            $('.tools').css({
+                'opacity': 0.3,
+                'pointer-events': 'none',
+                'user-select': 'none'
+            });
+        });
+
+        // ===================================================================================================
+
+        // GAME STATE ========================================================================================
+        con.on('UserJoinGame', (username) => {
+
+            appendChat('#simpleChat', 
+            `
+                <div style="color: #b3b3b3;">
+                    <i class="fas fa-info-circle color-orange"></i>
+                    <span class="color-orange" style="font-weight: bold">${sanitize(username)}</span> joined.
+                </div>
+            `
+            );
+        });
+
+        con.on('UserQuitGame', (username) => {
+
+            appendChat('#simpleChat', 
+            `
+                <div style="color: #b3b3b3;">
+                    <i class="fas fa-info-circle color-orange"></i>
+                    <span class="color-orange" style="font-weight: bold">${sanitize(username)}</span> quitted.
+                </div>
+            `
+            );
+        });
+
+        con.on('HostChangedGame', (host) => {
+            appendChat('#simpleChat', 
+            `
+                <div class="gameState-container">
+                    <div class="gameState-title">
+                        <i class="fas fa-home"></i> Host Changed
+                    </div> 
+                    <div class="gameState-desc">
+                        <div>
+                            <span class="color-orange">${sanitize(host)}</span> is the host now. 
+                        </div> 
+                    </div>
+                </div>
+            `  
+            );
+        });
+
+        con.on("ReadyGame", () => {
+            appendChat('#simpleChat', 
+            `
+                <div class="gameState-container">
+                    <div class="gameState-title">
+                        <i class="fas fa-dice"></i> Ready State
+                    </div> 
+                    <div class="gameState-desc">
+                        <div> Wait for other player... </div> 
+                    </div>
+                </div>  
+            `);
+        });
+
+        con.on('DrawingReadyGame', (drawer) => {
+            appendChat('#simpleChat', 
+            `
+                <div class="gameState-container">
+                    
+                    <div class="gameState-desc">
+                        <div><span class="color-orange">${sanitize(drawer)}</span> 's turn to draw. </div> 
+                    </div>
+                </div>  
+            `);
+        });
+
+        con.on('DrawingLosesTurnGame', (drawer) => {
+            // appendChat('#gameState', 
+
+            appendChat('#simpleChat',
+            `
+                <div class="gameState-container">
+                    
+                    <div class="gameState-desc">
+                        <div><span class="color-orange">${sanitize(drawer)}</span> loses its turn. </div> 
+                    </div>
+                </div>
+            `);
+        });
+
+        con.on('DrawingGame', (drawer) => {
+            appendChat('#simpleChat', 
+            `
+                <div class="gameState-container">
+                    
+                    <div class="gameState-desc">
+                        <div><span class="color-orange">${sanitize(drawer)}</span> is drawing. </div> 
+                    </div>
+                </div>
+            `);
+        });
+
+        con.on('DrawingSkippedGame', (drawer) => {
+            appendChat('#simpleChat', 
+            `
+                <div class="gameState-container">
+                    
+                    <div class="gameState-desc">
+                        <div><span class="color-orange">${sanitize(drawer)}</span> skipped its turn. </div> 
+                    </div>
+                </div>
+            `);
+        });
+
+        con.on('DrawingReportedGame', (drawer) => {
+            appendChat('#simpleChat', 
+            `
+                <div class="gameState-container">
+                    
+                    <div class="gameState-desc">
+                        <div><span class="color-orange">${sanitize(drawer)}</span> gets reported. </div> 
+                    </div>
+                </div>
+            `);
+        });
+
+        con.on('AnswerGame', (word) => {
+            appendChat('#simpleChat', 
+            `
+                <div class="gameState-container">
+                    
+                    <div class="gameState-desc">
+                        <div>Not everyone got the answer...</div> 
+                        <div>The answer is <span style="color: yellowgreen">${word}</span>. </div> 
+                    </div>
+                </div>
+            `);
+        });
+
+        con.on('AnswerCorrectGame', (word) => {
+            appendChat('#simpleChat', 
+            `
+                <div class="gameState-container">
+                    
+                    <div class="gameState-desc">
+                        <div>Everyone got the answer!</div> 
+                        <div>The answer is <span style="color: yellowgreen">${word}</span>. </div> 
+                    </div>
+                </div>
+            `);
+        });
+
+        con.on('WinnerGame', (topThreeUser) => {
+            appendChat('#simpleChat', 
+            `
+                <div class="gameState-container">
+                    
+                    <div class="gameState-desc">
+                        ${
+                            $.map(topThreeUser, (user, i) => {
+                                return `<div>
+                                            <span class="color-orange">${i + 1}) ${sanitize(user)}</span> 
+                                        </div>`
+                            }).join("")
+                        }
+                    </div>
+                </div>
+            `);
+        });
+
+        con.on('ScoreResetGame', () => {
+            appendChat('#simpleChat', 
+            `
+                <div class="gameState-container">
+                    <div class="gameState-title">
+                        <i class="fas fa-sync-alt"></i> Score Resetted
+                    </div>
+                </div>
+            `);
+        });
+
+        con.on('GroupResetGame', () => {
+            appendChat('#simpleChat', 
+            `
+                <div class="gameState-container">
+                    <div class="gameState-title">
+                        <i class="fas fa-sync-alt"></i> Game Resetted
+                    </div>
+                </div>
+            `);
+        });
+
+        con.on('DrawerReportGame', (drawer, username, reportCount, memberCount) => {
+            appendChat('#simpleChat', 
+            `
+                <div class="gameState-container">
+                    <div class="gameState-title"><i class="fas fa-bullhorn"></i> Report</div> 
+                    <div class="gameState-desc">
+                        <div>
+                            <span class="color-orange">${sanitize(username)}</span> has reported drawer: 
+                        </div> 
+                        <div>
+                            <span style="color: yellowgreen">${sanitize(drawer)} (${reportCount} / ${memberCount}) </span> 
+                        </div> 
+                    </div>
+                </div>
+            `);
+        });
+        // ==================================================================================================
+
+
+
+        // START CONNECTION ===========================================================================================
+        con.start()
+            .then(main);
+
+        function main() {
+            // Send message in private chat
+            $('#form').on('submit', e => {
+                e.preventDefault();
+                let message = $('#message').val().trim();
+                if (message) {
+
+                    // if it is spam, do nothing
+                    if (isPrivateSpam()) { return; }
+
+                    let url = getImageURL(message);
+                    let id  = getYoutubeId(message);
+
+                    if (url) {
+                        // Send image
+                        con.invoke('SendImage', url, selectedChatUser);
+                    }
+                    else if (id) {
+                        // Send YouTube
+                        con.invoke('SendYouTube', id, selectedChatUser);
+                    }
+                    else {
+                        // Send message
+                        con.invoke('SendMessage', message, selectedChatUser);
+                    }
+                    
+                    con.invoke('StoreUserHistory', message, selectedChatUser);
+                }
+                $('#message').val('').focus();
+            });
+        }
+
+        // CLOSE CONNECTION ===========================================================================================
+        con.onclose(err => {
+            //alert("Disconnected");
+            console.log('Disconnected');
+            window.location = "/"
+        });
+
+        // Event Listener =============================================================================================
+        // window.onbeforeunload = e => 'Are you sure you want to leave? You are in the middle of the game';
+
+        $('#exit').on('click', e => {
+            window.location = "gameroom.html";
+        })
+
+        $('#copylink').on('click', e => {
+            copyToClipboard(window.location.href);
+        })
+
+        // Start Button Click
+        $('#statusContainer').on('click', '#startBtn', e => {
+            con.invoke('DrawingReady');
+        });
+
+        // Draw Button Click
+        $('#statusContainer').on('click', '#drawBtn', e => {
+            // clear all timeout
+            stateClearTimeout();
+            con.invoke('Drawing');
+        });
+
+        // Skip Button Click
+        $('#statusContainer').on('click', '#skipBtn', e => {
+            con.invoke('DrawingSkipped');
+        });
+
+        // Report Button Click
+        $('#statusContainer').on('click', '#reportBtn', e => {
+
+            $(e.currentTarget).replaceWith('You had reported the drawer!');
+
+            con.invoke('ReportDrawer');
+        });
+        
+        $('#simpleChatForm').on('submit', e => {
+            e.preventDefault();
+
+            let message = $('#simpleChatText').val().trim();
+            $('#simpleChatText').val('');
+
+            if (!message) { return; } // if message is empty
+            if (isSpam('#simpleChat')) { return; } // if it was a spam
+
+            con.invoke("SendSimpleMessage", message);
+        });
+
+        // $('#answerChatForm').on('submit', e => {
+        //     e.preventDefault();
+
+        //     let message = $('#answerChatText').val().trim();
+        //     $('#answerChatText').val('');
+
+        //     if (!message) { return; } // if message is empty
+        //     if (isSpam('#answerChat')) { return; } // if it was a spam
+
+        //     con.invoke("SendAnswerMessage", message); // -> apphub
+        // });
+
+        // for input focus
+        $('#simpleChat').on('click', () => $('#simpleChatText').focus());
+        // $('#answerChat').on('click', () => $('#answerChatText').focus());
+    </script>
+
+    <!-- Modal Display -->
+    <script>
+        let modelShowing = "";
+
+        // When the user clicks the button, open the modal 
+        $('[data-toggle]').on('click', e => {
+            let modalName = $(e.currentTarget).data("toggle");
+            $(modalName).css('display', 'block');
+            $('body').css('overflow', 'hidden');
+            modelShowing = modalName;
+            // Remove All Notification
+            $('div[data-notify]').stop().remove();
+            // if there is a selected chat user
+            // focus the message
+            if (selectedChatUser) {
+                $('#message').focus();
+            }
+        });
+
+        // When the user clicks the button, close the modal 
+        $('[data-dismiss]').on('click', e => {
+            let modalName = $(e.currentTarget).data("dismiss");
+            $(modalName).css('display', 'none');
+            $('body').css('overflow', 'auto');
+            modelShowing = "";
+        })
+
+        //When the user clicks anywhere outside of the modal, close it
+        $(window).on('click', e => {
+            if (e.target == $(modelShowing)[0]) {
+                $(modelShowing).css('display', 'none');
+                $('body').css('overflow', 'auto');
+            }
+        });
+    </script>
+
+    <script>
+        $('#header-name').text(sessionStorage.getItem('name'));
+        $('#header-avatar').prop('src', sessionStorage.getItem('photo'));
+
+        // Check if touched the bottom
+        const m = $('.right-modal-body')[0];
+        let bottom = true;
+
+        // Selected Chat User
+        let selectedChatUser = "";
+
+        // know the user chat history
+        let userChatHistory = [];
+
+        // to remove array of userhistory with particular username
+        function removeUserHistory(arr, value) {
+            var i = 0;
+            while (i < arr.length) {
+                if (arr[i].user === value) {
+                    arr.splice(i, 1);
+                } else {
+                    ++i;
+                }
+            }
+            return arr;
+        }
+
+        function isBottom() {
+            bottom = m.scrollTop + m.clientHeight + 10 >= m.scrollHeight;
+        }
+
+        function scrollToBottom() {
+            if (bottom) {
+                m.scrollTop = m.scrollHeight;
+            }
+        }
+
+        // Send image
+        function getImageURL(message) {
+            let re = /.(jpg|jpeg|png|webp|gif|bmp)$/i;
+            let data = /^data:image\/(jpg|jpeg|png|webp|gif|bmp);base64.*={1,}/i;
+            try { 
+                let url = new URL(message);
+                if (re.test(url.pathname) || data.test(url.href)) { 
+                    return url.href; 
+                }
+            }
+            catch {
+                // Do nothing
+            }
+            return null;
+        }
+
+        // Send YouTube video
+        function getYoutubeId(message) {
+            try {
+                let url = new URL(message);
+                if (url.hostname == 'www.youtube.com' && url.pathname == '/watch') {
+                    return url.searchParams.get('v');
+                }
+            }
+            catch {
+                // Do nothing
+            }
+            return null;
+        }
+
+        // Display connected users
+        function appendUserChat(user) {
+            $('#chatList').append(
+                `<div class="chat-user" data-chat="${sanitize(user.username)}">
+                    <div class="body-avatar-container">
+                        <img class="photo" src="${sanitize(user.photo)}">
+                    </div>
+                    <div class="empty-container">
+                        ${sanitize(user.username)}
+                    </div>
+                    <div class="notify">
+
+                    </div>
+                </div>
+                `
+            );
+
+            // sample notify
+            // <div class="notify-count">
+            //     98
+            // </div>
+        }
+
+        function appendYoutubeChat(id, who) {
+            isBottom();
+            $('.right-modal-body').append(`
+                <li class="${who}">
+                    <div>
+                        <iframe width="400" height="300" src="https://www.youtube.com/embed/${id}" frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </li>    
+            `);
+            scrollToBottom();
+        }
+
+        function appendMessageChat(message, who) {
+            message = message
+                .split(':)').join('😊')
+                .split(':(').join('😢')
+                .split('<3').join('❤️')
+                .split('</3').join('💔');
+
+            message = $('<div>').text(message).html();
+            let target = 'target="_blank"';
+
+            // if http has our game, no target blank
+            if (message.indexOf('game.html?id=') >= 0) {
+                target = '';
+            }
+            
+            // Text-to-hyperlink
+            message = message.replace(
+                /(?<=^|\s)(https?:\/\/\S+)(?=$|\s)/gi , 
+                `<a href="$&" ${target} style="color: white;">$&</a>`
+            );
+
+            isBottom();
+            $('.right-modal-body').append(`
+                <li class="${who}">
+                    <div>
+                        ${message}
+                    </div>
+
+                </li>
+            `);
+            scrollToBottom();
+        }
+
+        function appendImageChat(url, who) {
+            isBottom();
+            $('.right-modal-body').append(`
+                <li class="${who}">
+                    <div>
+                        <img src="${url}" class="image" onload="scrollToBottom()"> 
+                    </div>
+                </li>
+            `);
+            scrollToBottom();
+        }
+
+        function appendSpamChat(info) {
+            isBottom();
+            $('.right-modal-body').append(`
+                <li class="spam">
+                    <div>
+                        ${info}
+                    </div>
+                </li>
+            `);
+            scrollToBottom();
+        }
+
+        function playChatSound() {
+            // play audio
+            // since chrome 66 does not allow play audio without interaction, ignores it then
+            var audio = new Audio('audio/notification.wav');
+            audio.play();
+        }
+
+        // play notification
+        function displayNotification(caller, keyword) {
+            // Pop up notification
+            let notification = $(`
+                <div class="chat-notification" data-notify="${sanitize(caller)}">
+                    <span class="chat-caller">${sanitize(caller)} </span> send a  <span class="chat-keyword"> ${keyword} </span> to you <i class="fas fa-times notification-close"></i>
+                </div>
+            `).appendTo('#notification').hide().fadeIn(500).delay(5000).fadeOut(500, () => {
+                notification.remove();
+            });
+        }
+
+        function incrementNotifyCount(caller) {
+            let callerChat = $(`div[data-chat="${caller}"]`);
+
+            let notifyCount = callerChat.find('.notify-count');
+            if (notifyCount.length) {
+                let n = parseInt(notifyCount.text()) + 1;
+                // if over 99, stays in 99
+                let nn = (n > 99) ? 99 : n;
+                notifyCount.text(nn);
+            }
+            else {
+                callerChat.find('.notify').html(`
+                    <div class="notify-count">
+                        1    
+                    </div>
+                `);
+            }
+        }
+
+        let privateRecentChat = Date.now();
+        let privateChatTimes = 0;
+        let privatePenaltyTime = null;
+
+        function isPrivateSpam() {
+            // if user gets penalty, user cannot chat for 3 seconds
+            if (privatePenaltyTime &&
+                Date.now() - privatePenaltyTime < 3000) {
+                    
+                appendSpamChat(`
+                    <i class="fas fa-exclamation-triangle"></i> 
+                    Do not spam the chat
+                `);
+                return true;
+            }
+            else {
+                // else set back the penalty to null
+                privatePenaltyTime = null;
+            }
+
+            // if already passed 4 seconds
+            // reset chat time and recent chat
+            if (Date.now() - privateRecentChat >= 4000) {
+                // reset chat times
+                privateChatTimes = 0;
+                privateRecentChat = Date.now();
+            }
+
+            // within 4 seconds, if user chat for 5 times, get penalty
+            if (privateChatTimes >= 5 && Date.now() - privateRecentChat < 4000) {
+
+                // reset chat times and recent chat time
+                privateChatTimes = 0;
+                privateRecentChat = Date.now();
+
+                // get penalty
+                privatePenaltyTime = Date.now();
+                appendSpamChat(`
+                    <i class="fas fa-exclamation-triangle"></i> 
+                    Do not spam the chat
+                `);
+                return true;
+            }
+
+            // count how many times
+            privateChatTimes++;
+            return false;
+        }
+
+        function displayChatModal(chatter) {
+            // trigger the click event on ChatList
+            $(`div[data-chat="${chatter}"]`).trigger('click');
+
+            // Display Modal
+            $('#myModal').css('display', 'block');
+            $('body').css('overflow', 'hidden');
+            modelShowing = '#myModal';
+
+            // Remove All Notification
+            $('div[data-notify]').stop().remove();
+
+            // focus message
+            $('#message').val('').focus();
+        }
+
+        // Chat =================================================================================
+        
+        con.on('ShowAllUserChat', (userlist) => {
+            let modalBody = $('#chatList');
+
+            modalBody.html('');
+
+            $.each(userlist, (key, user) => {
+                // if it is the user itself, then do not show
+                if (user.username != sessionStorage.getItem('name')) {
+                    appendUserChat(user);
+                }
+            })
+        });
+
+        con.on('AppendUserChat', appendUserChat);
+
+        con.on('RemoveUserChat', (username) => {
+            let user = $('[data-chat="' + username + '"]');
+
+            // if user is chatting with the other disconnected user
+            // the remove all the chat function
+            if (selectedChatUser == username) {
+                $('.right-modal-header').html(`
+                    <div class="header-avatar-container">
+                        <img src="avatar/empty.png">
+                    </div>
+                    <div class="header-name-container">Select a user to chat...</div>
+                `);
+                $('.right-modal-body').hide();
+                $('.right-modal-footer').hide();
+                selectedChatUser = "";
+            }
+
+            // remove all the notification, if still there
+            $(`div[data-notify="${username}"]`).stop().remove();
+
+            // remove the cntainer
+            user.remove();
+            
+            // Clear that particular user history from that disconnected user, if any
+            userChatHistory = removeUserHistory(userChatHistory, username);
+        });
+
+        // Changes
+        con.on('ReceiveChatMessage', (caller, message, who) => {
+
+            // if the other user was not chatting with the caller, do nothing
+            if (who == "others" && selectedChatUser != caller) {
+                return;
+            }
+
+            appendMessageChat(message, who);
+        });
+
+        // Receive image
+        con.on('ReceiveChatImage', (caller, url, who) => {
+
+            // if the user was not chatting with the caller, do nothing
+            if (who == "others" && selectedChatUser != caller) {
+                return;
+            }
+
+            appendImageChat(url, who);
+        });
+
+        // Receive YouTube video
+        con.on('ReceiveChatYouTube', (caller, id, who) => {
+
+            // if the user was not chatting with the caller, do nothing
+            if (who == "others" && selectedChatUser != caller) {
+                return;
+            }
+
+            appendYoutubeChat(id, who);
+        });
+
+        // To store the user chat message from others
+        con.on('ReceiveUserHistory', (username, message, who) => {
+            userChatHistory.push({
+                user: username,
+                message: message,
+                who: who
+            });
+        });
+
+        con.on('MoveChatToFirst', (username) => {
+            // if it was not at the first element
+            // then move to the first element
+            let chatContainer = $(`div[data-chat="${username}"]`);
+            if (!chatContainer.is(':first-child')) {
+                chatContainer = chatContainer.detach();
+                $('#chatList').prepend(chatContainer);
+            }
+        });
+
+        con.on('Notification', (caller, keyword) => {
+
+            // play notification sound
+            playChatSound();
+
+            // if other user did not open the modal
+            // display notification
+            if (!$('#myModal').is(':visible')) {
+                displayNotification(caller, keyword);
+            }
+
+            // if the other user was not chatting with the caller
+            // append notify-count
+            // then do nothing
+            if (selectedChatUser != caller) {
+                incrementNotifyCount(caller);
+            }
+        });
+
+        // Chat Event Listener ================================================================================
+
+        $('#chatList').on('click', 'div[data-chat]', e => {
+
+            let chatContainer = $(e.currentTarget);
+
+            let dataChat = chatContainer.data('chat');
+
+            // if already selecting, do nothing
+            if (selectedChatUser == dataChat) { 
+                 // apply focus on message
+                $('#message').val('').focus();
+                return;
+            }
+
+            // assign Selected Chat user
+            selectedChatUser = dataChat;
+
+            // apply css
+            chatContainer.siblings().removeClass('chatting-user');
+            chatContainer.addClass('chatting-user');
+
+            // remove notify-count, if any
+            $(`div[data-chat="${selectedChatUser}"]`).find(`.notify-count`).remove();
+
+            // attach chatter name and photo to header
+            let src = chatContainer.find('img')[0].src;
+            $('.right-modal-header').html(`
+                <div class="header-avatar-container">
+                    <img src="${sanitize(src)}">
+                </div>
+                <div class="header-name-container">${sanitize(selectedChatUser)}</div>
+            `);
+
+            // refresh the body html
+            $('.right-modal-body').html(``);
+
+            // and print the stored user chat history, if any
+            let history = userChatHistory.filter(x => x.user == selectedChatUser);
+
+            $.each(history, (key, history) => {
+
+                let message = history.message;
+                let url = getImageURL(message);
+                let id  = getYoutubeId(message);
+                let who = history.who;
+
+                if (url) {
+                    // Send image
+                    appendImageChat(url, who);
+                }
+                else if (id) {
+                    // Send YouTube
+                    appendYoutubeChat(id, who);
+                }
+                else {
+                    // Send message
+                    appendMessageChat(message, who);
+                }
+            });
+
+            $('.right-modal-body').show();
+            $('.right-modal-footer').show();
+
+            // apply focus on message
+            $('#message').val('').focus();
+        });
+
+        // Display private chat modal after clicking the notification
+        $('#notification').on('click', '[data-notify]', e => {
+
+            // get the chat name
+            let chatter = $(e.currentTarget).data('notify');
+
+            displayChatModal(chatter);
+        });
+
+        // remove the notification after clicking the cross button inside
+        $('#notification').on('click', '.notification-close', e => {
+            e.stopPropagation();
+            // remove the notification
+            $(e.currentTarget).parent().stop().remove();
+        });
+
+        // display that particular user private chat model
+        $('.user').on('click', '.userlist[data-user]', e => {
+
+            let chatter = $(e.currentTarget).data('user');
+
+            // if clicking the user itself, do nothing
+            if (chatter == sessionStorage.getItem('name')) {
+                return;
+            }
+            
+            displayChatModal(chatter);
+        });
+
+        // For Paper Clip
+        // Show/hide popup by the same button
+        $(document).ready(e => {
+            $('.fa-paperclip').click(function() {
+                $('#popup').toggle();
+            });
+        });
+
+        // Click anywhere to close the popup
+        $(document).click (e => {
+            if (e.target != $('.fa-paperclip')[0]) {
+                $('#popup').hide();
+            }
+        });
+
+        Vue.use(EmojiPicker)
+
+        new Vue({
+            el: '#emoji',
+            data() {
+                return {
+                    input: '',
+                    search: '',
+                }
+            },
+            methods: {
+                insert(emoji) {
+                    this.input += emoji;  
+                },
+                resetInput() {
+                    if (this.input) {
+                        this.input = '';
+                    }
+                }
+            },
+            directives: {
+                focus: {
+                    inserted(el) {
+                        el.focus();
+                    },
+                },
+            },
+        })
+
+        // Fullscreen image
+        $('.right-modal-body').on('click', '.image', e => e.target.requestFullscreen());
+
+        // Local image file select
+        $('#localImage').click(e => $('#file').click());
+
+        $('#file').change(e => {
+            let f = e.target.files[0];
+
+            if (f && f.type.startsWith('image/')) {
+                fit(f, 500, 500, 'dataURL', 'image/webp')
+                    .then(url => { 
+                        con.invoke('SendImage', url, selectedChatUser); 
+                        con.invoke('StoreUserHistory', url, selectedChatUser);
+                    });
+            }
+            e.target.value = null;
+        });
+
+        // Drag-and-drop image file select
+        $('.right-modal-body').on('dragenter dragover', e => {
+            e.preventDefault();
+            $('.right-modal-body').addClass('drag-and-drop');
+        });
+
+        $('.right-modal-body').on('dragleave drop', e => {
+            e.preventDefault();
+            $('.right-modal-body').removeClass('drag-and-drop');
+        });
+
+        $('.right-modal-body').on('drop', e => {
+                e.preventDefault();
+                let f = e.originalEvent.dataTransfer.files[0];
+
+                if (f && f.type.startsWith('image/')) {
+                    fit(f, 500, 500, 'dataURL', 'image/webp')
+                        .then(url => { 
+                            con.invoke('SendImage', url, selectedChatUser); 
+                            con.invoke('StoreUserHistory', url, selectedChatUser);
+                        });
+                }
+        });
+    </script>
+</body>
+
+</html>

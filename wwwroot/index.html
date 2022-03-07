@@ -6,8 +6,232 @@
     <title>RAG</title>
     <link href="images/favicon.png" rel="shortcut icon">
     <link href="css/style.css" rel="stylesheet">
-  </head>
+    <link rel="stylesheet" href="css/global.css">
+    <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+    integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+    <style>
+      .upload {
+            position: relative;
+        }
 
+      
+
+        .avatar-selection>label {
+            position: relative;
+        }
+
+        .avatar {
+            border-radius: 50%;
+            max-width: 70px;
+            cursor: pointer;
+        }
+
+        .checkmark {
+            position: absolute;
+            right: 0;
+            font-size: 1.4rem;
+            color: blue;
+            background-color: white;
+            border-radius: 50%;
+            display: none;
+            border: 2px solid white;
+        }
+
+        .avatar-selection {
+            display: grid;
+            grid-template-columns: 90px 90px 90px 90px;
+            grid-template-rows: 90px 90px;
+            border-bottom: 1px solid grey;
+            border-top: 1px solid grey;
+            padding: 1em 0;
+            align-content: center;
+            align-items: center;
+            justify-content: center;
+            grid-gap: 0.5em;
+            
+        }
+
+        .avatar-selection>label>input:checked~.checkmark {
+            display: inline-block;
+        }
+
+        .avatar-selection>label>input:checked~.avatar {
+            border: 5px solid green;
+        }
+
+        .upload {
+            position: relative;
+        }
+
+        .photo {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: block;
+            margin: 1em auto;
+            transition: 0.2s ease;
+            object-fit: cover;
+        }
+
+        .fa-image {
+            display: none;
+            font-size: 2rem;
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .upload:hover .fa-image {
+            display: inline-block;
+        }
+
+        photo:hover {
+            cursor: pointer;
+            opacity: 0.3;
+        }
+
+        #nameError {
+            color: #ff4040;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+        }
+
+        #name {
+            width: 100%;
+            display: block;
+            box-sizing: border-box;
+            font-size: 1rem;
+            padding: 0.3em 0.5em;
+            background-color: #e3e3e3;
+            border: none;
+            margin-top: 1em;
+        }
+
+        #name:focus {
+            background-color: white;
+        }
+
+        #name:focus::placeholder {
+            color: transparent;
+        }
+
+        #join {
+            width: 100%;
+            display: block;
+            padding: 0.7em;
+            font-size: 1rem;
+            border-radius: 10px;
+            border: none;
+            background-color: #1d5dc2;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 1em;
+            color: white;
+        }
+
+        #join:hover {
+            background-color: #124494;
+        }
+
+        @media (max-width: 1100px) {
+            .container {
+                width: 60%;
+            }
+
+            .photo {
+                width: 90px;
+                height: 90px;
+            }
+
+            .avatar {
+                max-width: 60px;
+            }
+        }
+
+        @media (max-width:1100px) {
+            .container {
+                width: 95%;
+            }
+
+            .photo {
+                width: 80px;
+                height: 80px;
+            }
+
+            .avatar-selection {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
+
+            #nameError {
+                font-size: 0.9rem;
+            }
+
+            .avatar-selection>label>input:checked~.avatar {
+                border: 2px solid green;
+            }
+
+            .checkmark {
+                font-size: 1.1rem;
+            }
+        }
+
+
+      .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        canvas {
+            display: none;
+            object-fit: cover;
+        }
+
+        #snap a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .header{
+          padding-bottom: 16px;
+        }
+    </style>
+  </head>
+<body>
   <div class="login-form">
     <div class="logo"><img src="images/favicon.png" alt=""></div>
 
@@ -16,7 +240,50 @@
       <h4>Real-Time Arcade Games</h4>
     </div>
 
-    <div style="height: 250px">
+    <form class="avatar-selection" autocomplete="off">
+      <label>
+          <input type="radio" name="avatar" value="./image/Avatar1.png" hidden>
+          <img class="avatar" src="./images/Avatar1.png">
+          <i class="checkmark fas fa-check-circle"></i>
+      </label>
+      <label>
+          <input type="radio" name="avatar" value="./image/Avatar2.png" hidden>
+          <img class="avatar" src="./images/Avatar2.png">
+          <i class="checkmark fas fa-check-circle"></i>
+      </label>
+      <label>
+          <input type="radio" name="avatar" value="./image/Avatar3.png" hidden>
+          <img class="avatar" src="./images/Avatar3.png">
+          <i class="checkmark fas fa-check-circle"></i>
+      </label>
+      <label>
+          <input type="radio" name="avatar" value="./image/Avatar4.png" hidden>
+          <img class="avatar" src="./images/Avatar4.png">
+          <i class="checkmark fas fa-check-circle"></i>
+      </label>
+      <label>
+          <input type="radio" name="avatar" value="./image/Avatar5.png" hidden>
+          <img class="avatar" src="./images/Avatar5.png">
+          <i class="checkmark fas fa-check-circle"></i>
+      </label>
+      <label>
+          <input type="radio" name="avatar" value="./image/Avatar6.png" hidden>
+          <img class="avatar" src="./images/Avatar6.png">
+          <i class="checkmark fas fa-check-circle"></i>
+      </label>
+      <label>
+          <input type="radio" name="avatar" value="./image/Avatar7.png" hidden>
+          <img class="avatar" src="./images/Avatar7.png">
+          <i class="checkmark fas fa-check-circle"></i>
+      </label>
+      <label>
+          <input type="radio" name="avatar" value="./image/Avatar8.png" hidden>
+          <img class="avatar" src="./images/Avatar8.png">
+          <i class="checkmark fas fa-check-circle"></i>
+      </label>
+  </form>
+
+    <div style="height: 200px">
       <div class="profile-pic-div">
         <img src="images/gamer100.png" id="photo">
 
@@ -25,7 +292,11 @@
       </div>
     </div>
 
-    <h6>Sign In</h6>
+    <div class="webcam-btn" style="text-align: center;">
+      <button id="myBtn">Webcam </button><span>📸</span>
+    </div>
+
+      <h6>Sign In</h6>
 
     <form>
       <div class="textbox">
@@ -33,20 +304,57 @@
         <span class="check-message hidden">Required</span>
       </div>
 
+      <div class="join"><button class="join-btn">Join</button></div>
+      
       <div class="privacy-link">
         <a href="#">Privacy Policy</a>
       </div>
     </form>
   </div>
 
+  
+  
+
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>
+            <button id="btntoggle" class="camera" onclick="cameraonoff()" style="position: absolute; top: 13.5%; right: 50%;">On Webcam</button>
+            <video id="video" style="width: 55%; height: 25%;" autoplay></video>
+            <button id="snap" style="cursor: pointer;position: absolute; top: 13.5%; left: 50%;">
+                <a download="avatar" id="snap-btn" onclick="takeAPicture()">Snap</a></button>
+            <canvas id="canvas"></canvas>                       
+        </p>              
+    </div>
+</div>
+
   <script src="js/jquery.slim.js"></script>
   <script src="js/app.js"></script>
+  <!-- <script src="js/webcam-easy.min.js"></script> -->
+  <script src="js/jquery-3.5.1.min.js"></script>
+  
   <script>
-    //-------------------avatar-------------------
-    // const imgDiv = document.querySelector(".profile-pic-div");
-    // const img = document.querySelector("#photo");
-    // const file = document.querySelector("#file");
-    // const uploadBtn = document.querySelector("#uploadBtn");
+   
+    // Display Chosen Avatar
+    let imageSrc = null;
+        $('input[type=radio][name=avatar]').on('change', e => {
+        e.preventDefault();
+
+        imageSrc = $(e.currentTarget).next()[0].src;
+        $('#photo').prop('src', imageSrc);
+        });
+
+        // Select Photo
+        $('.photo').click(e => $('#file').click());
+        $('.upload input').change(e => {
+            let f = e.target.files[0];
+            let img = $(e.target).siblings('img')[0];
+
+            if (f && f.type.startsWith('image/')) {
+                img.src = URL.createObjectURL(f);
+            }
+            e.target.value = null;
+        });
 
     //if hover on img
     $(".profile-pic-div").mouseenter(e => $("#uploadBtn").show());
@@ -63,68 +371,125 @@
         // const reader = new FileReader(); //FileReader is a predefined function of JS
         // reader.onload = e => $("#photo").prop("src", reader.result)
         // reader.readAsDataURL(choosedFile);
-        crop(choosedFile, 100, 100, "dataURL", "image/webp")
+        crop(choosedFile, 150, 150, "dataURL", "image/webp")
           .then(dataURL => $("#photo").prop("src", dataURL));
       }
     });
 
-    // uploadBtn.addEventListener("click", function () {
-    //   const reader = new FileReader();
-    //   let photo = reader.readAsDataURL("images/gamer.png");
-    // });
+    // To check if username is used by others people ===================================
+    if (sessionStorage.getItem('nameError')) {
+            alert("Name has been used by others 😥. Please choose another username 🙏");
+            
+            // $('#nameError').show();
 
-    // ========================================================================================
-    // General
-    // ========================================================================================
+            let sessionPhoto = sessionStorage.getItem('photo');
 
-    // ========================================================================================
-    // Events
-    // ========================================================================================
+            $(`input[value='${sessionPhoto}']`).prop('checked', true);
+            $('#photo').prop('src', sessionPhoto);
 
-/*
-    // save photo to session storage by clickling choose photo
-    // if did not choose photo, meaning the session storage for photo is empty
-    // therefore, need to set default image
-    if (document.getElementById("uploadBtn").clicked == false) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        console.log(reader.result);
-        sessionStorage.setItem("photo", reader.result);
-      });
-      //    let photo = reader.readAsDataURL("images/gamer.png");
-      //    sessionStorage.setItem("photo", photo);
-    }
+            sessionStorage.removeItem('nameError');
+        }
 
-    document.querySelector("#file").addEventListener("change", function () {
-      const reader = new FileReader();
-
-      reader.addEventListener("load", () => {
-        console.log(reader.result);
-        sessionStorage.setItem("photo", reader.result);
-      });
-
-      reader.readAsDataURL(this.files[0]); // reads single file only
-      //if multiple files then we need a loop to read all files one by one
-    });
-
-    // var defaultimgpath = "images/gamer.png";
-    // fileUpload.PostedFile.SaveAs(defaultimgpath);
-    // Session["DefaultImgPath"] = defaultimgpath;
-*/
     $("form").submit((e) => {
-      e.preventDefault();
+       e.preventDefault();
 
       let photo = $("#photo").prop("src");
       let name = $("#name").val().trim();
       
+      if (!name) {
+                alert("Name is required!");
+                return;
+            }
+
       if (photo && name) {
         //let url = getImageURL(photo);
         sessionStorage.setItem("photo", photo);
         sessionStorage.setItem("name", name);
-        location = "list.html";
+        location = "gameroom.html";
       }
 
       $("#name").val("").focus();
     });
+
+    // Open Modal
+    var modal = document.getElementById("myModal");
+
+    var btn = document.getElementById("myBtn");
+
+    var span = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function() {
+    modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // On/Off Webcam
+    var videoElem = document.getElementById("video");
+    var btnElm = document.getElementById("btntoggle");
+    var isPlaying = !!videoElem.srcObject;
+
+    function cameraonoff() {
+        if (!isPlaying) {
+            cameraon();
+        } else {
+            cameraoff();
+        }
+    }
+
+    function cameraon() {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices
+            .getUserMedia({
+              video: true
+            })
+            .then(function (stream) {
+              videoElem.srcObject = stream;
+              videoElem.play();
+            })
+            .then(() => {
+              isPlaying = true;
+              btnElm.innerText = "Off Webcam";
+            });
+        }    
+        // Call takeAPicture() Function
+        takeAPicture();
+    }
+
+    function cameraoff() {
+        const stream = videoElem.srcObject;
+        if (stream) {
+          const tracks = stream.getTracks();
+
+          tracks.forEach(function (track) {
+            track.stop();
+          });
+
+          videoElem.srcObject = null;
+          isPlaying = false;
+          btnElm.innerText = "On Webcam";
+        }
+    }
+
+    // Snap
+    const canvasElement = document.getElementById("canvas");
+    // const webcamElement = document.getElementById('video');
+    const webcam = new Webcam(videoElem, "user", canvasElement);
+
+    function takeAPicture() {
+        let picture = webcam.snap();
+        //returns a data URI containing a representation of the image in the format of PNG
+        
+        document.querySelector("#snap-btn").href = picture;
+    }
   </script>
+  </body>
 </html>
