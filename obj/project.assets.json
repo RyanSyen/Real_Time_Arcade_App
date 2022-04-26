@@ -15,11 +15,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\final\\assignment.csproj",
+      "projectUniqueName": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\Project1\\final\\assignment.csproj",
       "projectName": "assignment",
-      "projectPath": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\final\\assignment.csproj",
+      "projectPath": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\Project1\\final\\assignment.csproj",
       "packagesPath": "C:\\Users\\yisye\\.nuget\\packages\\",
-      "outputPath": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\final\\obj\\",
+      "outputPath": "D:\\School\\TARUC\\Year 2\\Sem 3\\BAIT3093 Emerging Web Technologies\\Project1\\final\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
